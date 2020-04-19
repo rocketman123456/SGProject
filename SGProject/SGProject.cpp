@@ -7,5 +7,7 @@ using namespace std;
 int main()
 {
 	cout << "Hello SGProject." << endl;
+	cout << "Startup." << endl;
+
 	return 0;
 }

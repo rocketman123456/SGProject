@@ -9,10 +9,16 @@ project ("SGProject")
 include_directories(
 	"${PROJECT_SOURCE_DIR}/SGProject"
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
-	"${PROJECT_SOURCE_DIR}/3rdParty/include/pthead"
+	"${PROJECT_SOURCE_DIR}/3rdParty/include/pthread"
+)
+
+link_directories(
+    "${PROJECT_SOURCE_DIR}/3rdParty/lib"
 )
 
 add_subdirectory ("SGProject")
 add_subdirectory ("SGCore")
+add_subdirectory ("test")
 
 add_executable (SGProject "SGProject/SGProject.cpp")
+target_link_libraries (SGProject libpthreadVCE3d.lib)
