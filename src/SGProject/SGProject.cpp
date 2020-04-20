@@ -12,7 +12,7 @@ using namespace SG;
 int SGMain()
 {
 	SGLog::GetSingleton().Initialize();
-	LOG_DEBUG("Hello SGProject.")
+	LOG_INFO("Hello SGProject.");
 
 	int ret;
 	do {
