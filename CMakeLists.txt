@@ -4,21 +4,25 @@
 cmake_minimum_required (VERSION 3.8)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix, usually d on windows")
+set(CMAKE_RELEASE_POSTFIX "" CACHE STRING "add a postfix, usually empty on windows")
+set(CMAKE_RELWITHDEBINFO_POSTFIX "rd" CACHE STRING "add a postfix, usually empty on windows")
+set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on windows")
+
 project ("SGProject")
 
 include_directories(
-	"${PROJECT_SOURCE_DIR}/SGProject"
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
-	"${PROJECT_SOURCE_DIR}/3rdParty/include/pthread"
+	"${PROJECT_SOURCE_DIR}/src/SGCommon"
+	"${PROJECT_SOURCE_DIR}/src/SGProject"
+	"${PROJECT_SOURCE_DIR}/src/SGInterface"
+	"${PROJECT_SOURCE_DIR}/src/SGApplication"
 )
 
 link_directories(
     "${PROJECT_SOURCE_DIR}/3rdParty/lib"
 )
 
-add_subdirectory ("SGProject")
-add_subdirectory ("SGCore")
+add_subdirectory ("src")
+add_subdirectory ("Application")
 add_subdirectory ("test")
-
-add_executable (SGProject "SGProject/SGProject.cpp")
-target_link_libraries (SGProject libpthreadVCE3d.lib)

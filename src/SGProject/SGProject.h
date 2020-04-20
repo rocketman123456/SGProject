@@ -3,6 +3,10 @@
 #pragma once
 
 #include <iostream>
-
 #include "Eigen/Eigen"
-#include "pthread.h"
+#include "pthread/pthread.h"
+
+#include "SGDefine.h"
+#include "SGIRuntimeModule.h"
+#include "SGIApplication.h"
+#include "SGBaseApplication.h"

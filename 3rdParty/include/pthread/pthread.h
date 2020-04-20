@@ -72,7 +72,7 @@
 #error ERROR [__FILE__, line __LINE__]: SEH is not supported for this compiler.
 #endif
 
-#include <_ptw32.h>
+#include <pthread/_ptw32.h>
 
 /*
  * Stop here if we are being included by the resource compiler.
@@ -178,7 +178,7 @@ enum
 };
 
 #include <time.h>
-#include <sched.h>
+#include <pthread/sched.h>
 
 /*
  * -------------------------------------------------------------
