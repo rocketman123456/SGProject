@@ -14,12 +14,3 @@ target_link_libraries(SGEmpty
 	SGGraphicsManager
 	SGMultiThread
 )
-#if(CMAKE_BUILD_TYPE STREQUAL Debug)
-#	target_link_libraries (SGEmpty 
-#		libpthreadVCE3d.lib
-#	)
-#elseif(CMAKE_BUILD_TYPE STREQUAL Release)
-#	target_link_libraries (SGEmpty 
-#		libpthreadVCE3.lib
-#	)
-#endif()
