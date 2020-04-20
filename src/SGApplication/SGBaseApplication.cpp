@@ -2,7 +2,6 @@
 
 int SG::SGBaseApplication::Initialize()
 {
-	m_bQuit = false;
 	return 0;
 }
 

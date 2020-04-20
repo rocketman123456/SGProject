@@ -5,9 +5,9 @@ namespace SG
 {
 	enum class LogLevel : int
 	{
-		Trace = 0,
-		Info,
+		Info = 0,
 		Debug,
+		Trace,
 		Fixme,
 		Warning,
 		Error,
@@ -19,6 +19,9 @@ namespace SG
 	public:
 		int Initialize();
 		void printf(LogLevel nLevel, const char* szFunction, const char* szSourcePath, int nLine, const char* szFormat, ...);
+
+		inline void Enable() { m_bEnabled = true; }
+		inline void Disable() { m_bEnabled = false; }
 	protected:
 		bool m_bEnabled = true;
 	};

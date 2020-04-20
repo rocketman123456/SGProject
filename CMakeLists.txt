@@ -19,12 +19,15 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGProject"
 	"${PROJECT_SOURCE_DIR}/src/SGInterface"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
+	"${PROJECT_SOURCE_DIR}/src/SGGraphics"
+	"${PROJECT_SOURCE_DIR}/src/SGMultiThread"
 )
 
 link_directories(
     "${PROJECT_SOURCE_DIR}/3rdParty/lib"
 )
 
+add_subdirectory ("3rdParty")
 add_subdirectory ("src")
 add_subdirectory ("Application")
 add_subdirectory ("test")

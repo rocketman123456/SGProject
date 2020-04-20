@@ -1,5 +1,6 @@
 #pragma once
 #include "SGIApplication.h"
+#include "SGGraphicsManager.h"
 
 namespace SG
 {
@@ -10,7 +11,5 @@ namespace SG
 
 		virtual void Tick();
 		virtual bool IsQuit();
-	protected:
-		bool m_bQuit;
 	};
 }

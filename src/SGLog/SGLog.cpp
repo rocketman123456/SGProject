@@ -1,10 +1,12 @@
 #include "SGLog.h"
+#define SPDLOG_HEADER_ONLY
 #include <spdlog/logger.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/msvc_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#define LOG_STR_BUFFER_LEN 2000
 static std::unique_ptr<spdlog::logger> g_logger;
 
 int SG::SGLog::Initialize()
@@ -17,11 +19,16 @@ int SG::SGLog::Initialize()
 	msvc_sink->set_level(spdlog::level::trace);  // message generating filter
 	msvc_sink->set_pattern("[%t][%^%l%$]%v");
 
-	auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("GPCS4.log", true);
+	//auto async_file = spdlog::basic_logger_mt<spdlog::async_factory>("async_file_logger", "logs/async_log.txt");
+	//file_sink->set_level(spdlog::level::trace);
+	//file_sink->set_pattern("[%t][%^%l%$]%v");
+
+	auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("SGProject.log", true);
 	file_sink->set_level(spdlog::level::trace);
 	file_sink->set_pattern("[%t][%^%l%$]%v");
 
 	g_logger.reset(new spdlog::logger("SGProject", { msvc_sink, file_sink, console_sink }));
+	//g_logger.reset(new spdlog::logger("SGProject", { msvc_sink, file_sink, console_sink }));
 	g_logger->set_level(spdlog::level::trace);  // message showing filter
 	return 0;
 }
@@ -51,7 +58,7 @@ void SG::SGLog::printf(LogLevel nLevel, const char* szFunction, const char* szSo
 		g_logger->info("{}({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Fixme:
-		g_logger->warn("<FIXME>{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->critical("<FIXME>{}({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Warning:
 		g_logger->warn("{}({}): {}", szFunction, nLine, szTempStr);

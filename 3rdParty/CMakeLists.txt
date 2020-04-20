@@ -1,3 +1,5 @@
 cmake_minimum_required (VERSION 3.8)
 
-add_library(SGTime SGTime.cpp)
+add_library(GLAD
+	src/glad.c
+)

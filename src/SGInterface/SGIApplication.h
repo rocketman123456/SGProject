@@ -10,5 +10,12 @@ namespace SG
 
 		virtual void Tick() = 0;
 		virtual bool IsQuit() = 0;
+
+	public:
+		void SetIsQuit(bool quit) { m_bQuit = quit; }
+	protected:
+		bool m_bQuit = false;
 	};
+
+	extern SGIApplication* g_pApp;
 }

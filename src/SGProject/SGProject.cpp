@@ -2,11 +2,6 @@
 //
 #include "SGProject.h"
 
-namespace SG
-{
-	extern SGIApplication* g_pApp;
-}
-
 using namespace SG;
 
 int SGMain()
@@ -18,15 +13,22 @@ int SGMain()
 	do {
 		if ((ret = g_pApp->Initialize()) != 0) 
 		{
-			printf("Application Initialize Failed.");
+			LOG_ERROR("Application Initialize Failed.");
+			break;
+		}
+		if ((ret = g_pGraphicsManager->Initialize()) != 0)
+		{
+			LOG_ERROR("GraphicsManager Initialize Failed.");
 			break;
 		}
 
 		while (!g_pApp->IsQuit())
 		{
 			g_pApp->Tick();
+			g_pGraphicsManager->Tick();
 		}
 
+		g_pGraphicsManager->Finalize();
 		g_pApp->Finalize();
 	} while (false);
 

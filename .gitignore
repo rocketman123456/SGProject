@@ -1,5 +1,5 @@
 .vs/
 .github/
 out/
-3rdParty/lib/
 3rdParty/bin/
+#3rdParty/lib/
