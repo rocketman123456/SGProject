@@ -1,7 +1,6 @@
 ﻿// SGProject.cpp: 定义应用程序的入口点。
 //
 #include "SGProject.h"
-
 using namespace SG;
 
 int SGMain()

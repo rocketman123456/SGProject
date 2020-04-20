@@ -49,25 +49,25 @@ void SG::SGLog::printf(LogLevel nLevel, const char* szFunction, const char* szSo
 	switch (nLevel)
 	{
 	case LogLevel::Debug:
-		g_logger->debug("{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->debug("[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Trace:
-		g_logger->trace("{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->trace("[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Info:
-		g_logger->info("{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->info("[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Fixme:
-		g_logger->critical("<FIXME>{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->critical("<FIXME>[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Warning:
-		g_logger->warn("{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->warn("[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Error:
-		g_logger->error("{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->error("[{}]({}): {}", szFunction, nLine, szTempStr);
 		break;
 	case LogLevel::Graphic:
-		g_logger->trace("<GRAPH>{}({}): {}", szFunction, nLine, szTempStr);
+		g_logger->trace("<GRAPH>{}({},{}): {}", szFunction, szSourcePath, nLine, szTempStr);
 		break;
 	}
 }

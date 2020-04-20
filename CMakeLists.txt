@@ -14,13 +14,16 @@ project ("SGProject")
 include_directories(
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
 	"${PROJECT_SOURCE_DIR}/src"
-	"${PROJECT_SOURCE_DIR}/src/SGLog"
-	"${PROJECT_SOURCE_DIR}/src/SGTime"
-	"${PROJECT_SOURCE_DIR}/src/SGProject"
-	"${PROJECT_SOURCE_DIR}/src/SGInterface"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
-	"${PROJECT_SOURCE_DIR}/src/SGGraphics"
+	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
+	"${PROJECT_SOURCE_DIR}/src/SGFileManager"
+	"${PROJECT_SOURCE_DIR}/src/SGGraphicsManager"
+	"${PROJECT_SOURCE_DIR}/src/SGInterface"
+	"${PROJECT_SOURCE_DIR}/src/SGLog"
+	"${PROJECT_SOURCE_DIR}/src/SGMemoryManager"
 	"${PROJECT_SOURCE_DIR}/src/SGMultiThread"
+	"${PROJECT_SOURCE_DIR}/src/SGProject"
+	"${PROJECT_SOURCE_DIR}/src/SGTime"
 )
 
 link_directories(

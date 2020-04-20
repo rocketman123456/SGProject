@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.8)
 add_executable (SGEmpty EmptyApplication.cpp)
 target_link_libraries(SGEmpty
 	GLAD
+	sqlite3
 	glfw3.lib
 )
 target_link_libraries(SGEmpty
@@ -10,7 +11,7 @@ target_link_libraries(SGEmpty
 	SGBaseApplication
 	SGTime
 	SGLog
-	SGGraphics
+	SGGraphicsManager
 	SGMultiThread
 )
 #if(CMAKE_BUILD_TYPE STREQUAL Debug)

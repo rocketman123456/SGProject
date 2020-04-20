@@ -27,7 +27,7 @@ namespace SG
 	};
 }
 
-#define _LOG_PRINT_(level, format, ...)    ::SG::SGLog::GetSingleton().printf(level, __FUNCTION__, __FILE__, __LINE__, format, __VA_ARGS__)
+#define _LOG_PRINT_(level, format, ...)    ::SG::SGLog::GetSingleton().printf(level, __FUNCSIG__, __FILE__, __LINE__, format, __VA_ARGS__)
 // for debug print
 #define LOG_DEBUG(format, ...) _LOG_PRINT_(::SG::LogLevel::Debug, format, __VA_ARGS__);
 // for trace calling

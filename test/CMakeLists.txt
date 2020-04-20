@@ -10,3 +10,6 @@ elseif(CMAKE_BUILD_TYPE STREQUAL Release)
 		libpthreadVCE3.lib
 	)
 endif()
+
+add_executable (sqlite_test "sqlite_test.cpp")
+target_link_libraries(sqlite_test sqlite3)
