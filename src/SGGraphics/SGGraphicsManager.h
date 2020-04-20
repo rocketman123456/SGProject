@@ -14,6 +14,8 @@ namespace SG
 		virtual void Tick();
 	protected:
 		GLFWwindow* m_window;
+		int16_t m_witdh = 1600;
+		int16_t m_height = 900;
 	};
 
 	extern SGIRuntimeModule* g_pGraphicsManager;

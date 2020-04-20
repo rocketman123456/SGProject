@@ -7,6 +7,8 @@
 #include "pthread/pthread.h"
 
 #include "SGDefine.h"
+#include "SGModules.h"
+
 #include "SGSingleton.h"
 #include "SGLog.h"
 #include "SGIRuntimeModule.h"
