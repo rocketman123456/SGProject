@@ -7,24 +7,27 @@ namespace SG
 	extern SGIApplication* g_pApp;
 }
 
+using namespace SG;
+
 int SGMain()
 {
-	printf("Hello SGProject.");
-	int ret;
+	SGLog::GetSingleton().Initialize();
+	LOG_DEBUG("Hello SGProject.")
 
+	int ret;
 	do {
-		if ((ret = SG::g_pApp->Initialize()) != 0) 
+		if ((ret = g_pApp->Initialize()) != 0) 
 		{
 			printf("Application Initialize Failed.");
 			break;
 		}
 
-		while (!SG::g_pApp->IsQuit())
+		while (!g_pApp->IsQuit())
 		{
-			SG::g_pApp->Tick();
+			g_pApp->Tick();
 		}
 
-		SG::g_pApp->Finalize();
+		g_pApp->Finalize();
 	} while (false);
 
 	return ret;

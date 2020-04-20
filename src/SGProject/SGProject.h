@@ -10,3 +10,5 @@
 #include "SGIRuntimeModule.h"
 #include "SGIApplication.h"
 #include "SGBaseApplication.h"
+#include "SGSingleton.h"
+#include "SGLog.h"

@@ -13,8 +13,9 @@ project ("SGProject")
 
 include_directories(
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
+	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/SGLog"
-	"${PROJECT_SOURCE_DIR}/src/SGCommon"
+	"${PROJECT_SOURCE_DIR}/src/SGTime"
 	"${PROJECT_SOURCE_DIR}/src/SGProject"
 	"${PROJECT_SOURCE_DIR}/src/SGInterface"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
