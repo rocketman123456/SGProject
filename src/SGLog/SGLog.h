@@ -3,5 +3,8 @@
 
 namespace SG
 {
+	class SGLog
+	{
 
+	};
 }
