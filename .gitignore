@@ -1,5 +1,6 @@
 .vs/
 .github/
 out/
+build/
 3rdParty/bin/
 #3rdParty/lib/

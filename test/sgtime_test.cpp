@@ -9,6 +9,6 @@ using namespace SG;
 int main(void)
 {
     SGTime time;
-    time.dsptime();
+    time.DSPTime();
     return 0;
 }

@@ -8,10 +8,10 @@ target_link_libraries(SGEmpty
 )
 target_link_libraries(SGEmpty
 	SGProject
-	SGBaseApplication
-	SGTime
 	SGLog
+	SGTime
+	SGBaseApplication
 	SGGraphicsManager
-	SGMultiThread
 	SGEventManager
+	SGMultiThread
 )

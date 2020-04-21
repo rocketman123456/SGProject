@@ -1,6 +1,7 @@
 #pragma once
 #include "SGIApplication.h"
 #include "SGGraphicsManager.h"
+#include "SGEventManager.h"
 
 namespace SG 
 {

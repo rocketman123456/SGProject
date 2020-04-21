@@ -13,7 +13,7 @@ SG::SGTime::~SGTime()
 
 }
 
-void SG::SGTime::dsptime() {
+void SG::SGTime::DSPTime() {
     char* pxq[] = { "日","一","二","三","四","五","六" };
     cout << local->tm_year + 1900 << "年" << local->tm_mon + 1 << "月" << local->tm_mday << "日 ";
     cout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ";
