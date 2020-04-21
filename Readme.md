@@ -1,14 +1,15 @@
-Simple Game Project 
-	use VS2019+CMake
+#Simple Game Project 
+use VS2019+CMake
 
-3rdParty 
-	-Eigen-3.3.7 
-	-pthread-3.0.0 
-	-spdlog-1.5.0 
-	-sqlite-3.31.1
+#3rdParty 
+*Eigen-3.3.7 
+*pthread-3.0.0 
+*spdlog-1.5.0 
+*sqlite-3.31.1
+*igslot
 
-this is main loop
---------------------------------------------------
+#this is main loop
+'
 int main(int argc, char** argv) {
 	int ret;
     g_pApp->SetCommandLineParameters(argc, argv);
@@ -107,4 +108,4 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-----------------------------------------------------------------------
+'
