@@ -21,7 +21,8 @@ namespace SG
 		//int32_t m_vertexShader;
 		//int32_t m_fragmentShader;
 		//int32_t m_shaderProgram;
-		uint32_t m_VBO, m_VAO;
+		uint32_t m_VBO, m_VAO, m_EBO;
+		uint32_t m_texture;
 		Shader* m_Shader;
 
 		int32_t m_witdh = 1600;

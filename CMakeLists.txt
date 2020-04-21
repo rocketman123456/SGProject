@@ -19,8 +19,8 @@ configure_file (
 )
 
 include_directories(
-	"${PROJECT_SOURCE_DIR}/3rdParty/include"
 	"${PROJECT_SOURCE_DIR}/Config"
+	"${PROJECT_SOURCE_DIR}/3rdParty/include"
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
