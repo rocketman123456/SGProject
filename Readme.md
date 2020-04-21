@@ -8,7 +8,7 @@ Simple Game Project
 	-sqlite-3.31.1
 
 this is main loop
-'''
+--------------------------------------------------
 int main(int argc, char** argv) {
 	int ret;
     g_pApp->SetCommandLineParameters(argc, argv);
@@ -107,4 +107,4 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-'''
+----------------------------------------------------------------------
