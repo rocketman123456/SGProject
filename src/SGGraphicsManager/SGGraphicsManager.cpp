@@ -1,7 +1,8 @@
 #include "SGGraphicsManager.h"
-#include "SGBaseApplication.h"
-#include "SGLog.h"
 #include "SGConfig.h"
+#include "SGLog.h"
+#include "SGBaseApplication.h"
+
 #include <string>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -22,6 +23,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 int SG::SGGraphicsManager::Initialize()
 {
+	m_sig_end.connect(&SGIApplication::SetIsQuit, g_pApp);
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -51,28 +54,6 @@ int SG::SGGraphicsManager::Initialize()
 	std::string vs = base + "/Shaders/shader.vs";
 	std::string fs = base + "/Shaders/shader.fs";
 	m_Shader = new Shader(vs.c_str(), fs.c_str());
-
-	std::string pic = base + "/Assets/Textures/container.jpg";
-	int width, height, nrChannels;
-	glGenTextures(1, &m_texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load and generate the texture
-	unsigned char* data = stbi_load(pic.c_str(), &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		LOG_ERROR("Failed to load texture");
-	}
-	stbi_image_free(data);
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -109,6 +90,30 @@ int SG::SGGraphicsManager::Initialize()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	// load picture
+	std::string pic = base + "/Assets/Textures/container.jpg";
+	int width, height, nrChannels;
+	glGenTextures(1, &m_texture);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load and generate the texture
+	unsigned char* data = stbi_load(pic.c_str(), &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		LOG_ERROR("Failed to load texture");
+	}
+	stbi_image_free(data);
+
+	LOG_INFO("SGGraphicsManager Initialize");
 	return 0;
 }
 
@@ -119,15 +124,15 @@ void SG::SGGraphicsManager::Finalize()
     glDeleteBuffers(1, &m_VBO);
 	glDeleteBuffers(1, &m_EBO);
 	glfwTerminate();
+	LOG_INFO("SGGraphicsManager Finalize");
 }
 
 void SG::SGGraphicsManager::Tick()
 {
-    // TODO: use event system tell application to close
 	if (glfwWindowShouldClose(m_window))
 	{
-		LOG_INFO("[TODO]Close Window");
-		g_pApp->SetIsQuit(true);
+		LOG_INFO("Close Window");
+		m_sig_end(true);
 	}
 	// render
 	// ------

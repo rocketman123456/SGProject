@@ -1,7 +1,9 @@
 #pragma once
-#include "SGIRuntimeModule.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <sigslot/signal.hpp>
+
+#include "SGIRuntimeModule.h"
 #include "Shader.h"
 
 namespace SG
@@ -17,6 +19,8 @@ namespace SG
 	public:
 		GLFWwindow* GetGLFWWindow() const { return m_window; }
 	protected:
+		sigslot::signal<bool> m_sig_end;
+
 		GLFWwindow* m_window;
 		//int32_t m_vertexShader;
 		//int32_t m_fragmentShader;
