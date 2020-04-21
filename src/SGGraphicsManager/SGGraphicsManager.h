@@ -2,6 +2,7 @@
 #include "SGIRuntimeModule.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Shader.h"
 
 namespace SG
 {
@@ -17,10 +18,11 @@ namespace SG
 		GLFWwindow* GetGLFWWindow() const { return m_window; }
 	protected:
 		GLFWwindow* m_window;
-		int32_t m_vertexShader;
-		int32_t m_fragmentShader;
-		int32_t m_shaderProgram;
+		//int32_t m_vertexShader;
+		//int32_t m_fragmentShader;
+		//int32_t m_shaderProgram;
 		uint32_t m_VBO, m_VAO;
+		Shader* m_Shader;
 
 		int32_t m_witdh = 1600;
 		int32_t m_height = 900;

@@ -15,6 +15,11 @@ int SGMain()
 			LOG_ERROR("Application Initialize Failed.");
 			break;
 		}
+		if ((ret = g_pEventManager->Initialize()) != 0)
+		{
+			LOG_ERROR("EventManager Initialize Failed.");
+			break;
+		}
 		if ((ret = g_pGraphicsManager->Initialize()) != 0)
 		{
 			LOG_ERROR("GraphicsManager Initialize Failed.");
@@ -24,10 +29,12 @@ int SGMain()
 		while (!g_pApp->IsQuit())
 		{
 			g_pApp->Tick();
+			g_pEventManager->Tick();
 			g_pGraphicsManager->Tick();
 		}
 
 		g_pGraphicsManager->Finalize();
+		g_pEventManager->Finalize();
 		g_pApp->Finalize();
 	} while (false);
 

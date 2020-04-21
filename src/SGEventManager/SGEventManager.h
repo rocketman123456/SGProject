@@ -11,4 +11,6 @@ namespace SG
 
 		virtual void Tick();
 	};
+
+	extern SGIRuntimeModule* g_pEventManager;
 }

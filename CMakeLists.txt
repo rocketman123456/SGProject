@@ -10,9 +10,17 @@ set(CMAKE_RELWITHDEBINFO_POSTFIX "rd" CACHE STRING "add a postfix, usually empty
 set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on windows")
 
 project ("SGProject")
+set (SGProject_VERSION_MAJOR 0)
+set (SGProject_VERSION_MINOR 1)
+
+configure_file (
+	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
+	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h"
+)
 
 include_directories(
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
+	"${PROJECT_SOURCE_DIR}/Config"
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
