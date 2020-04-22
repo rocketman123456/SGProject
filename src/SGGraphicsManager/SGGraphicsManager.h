@@ -17,16 +17,14 @@ namespace SG
 		virtual void Tick();
 
 	public:
-		GLFWwindow* GetGLFWWindow() const { return m_window; }
+		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 	protected:
-		sigslot::signal<bool> m_sig_end;
+		sigslot::signal<bool> m_SigEnd;
 
-		GLFWwindow* m_window;
-		//int32_t m_vertexShader;
-		//int32_t m_fragmentShader;
-		//int32_t m_shaderProgram;
+		GLFWwindow* m_Window;
 		uint32_t m_VBO, m_VAO, m_EBO;
-		uint32_t m_texture;
+		uint32_t m_Texture1;
+		uint32_t m_Texture2;
 		Shader* m_Shader;
 
 		int32_t m_witdh = 1600;

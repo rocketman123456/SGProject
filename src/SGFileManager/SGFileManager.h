@@ -1,5 +1,6 @@
 #pragma once
 #include "SGIRuntimeModule.h"
+#include <string>
 
 namespace SG
 {
@@ -10,5 +11,11 @@ namespace SG
 		virtual void Finalize() override;
 
 		virtual void Tick() override;
+	public:
+		bool CheckFileExist(const std::string& filename);
+
+	protected:
+		// decide search file in normal file system or in zip file
+		bool m_isDeveloping = true; 
 	};
 }
