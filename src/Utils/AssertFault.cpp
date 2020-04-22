@@ -1,4 +1,4 @@
-#include "Fault.h"
+#include "AssertFault.h"
 #include <assert.h>
 
 //----------------------------------------------------------------------------

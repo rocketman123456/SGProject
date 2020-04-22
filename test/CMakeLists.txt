@@ -12,10 +12,12 @@ elseif(CMAKE_BUILD_TYPE STREQUAL Release)
 endif()
 
 add_executable (sqlite_test "sqlite_test.cpp")
-target_link_libraries(sqlite_test sqlite3)
+target_link_libraries (sqlite_test sqlite3)
 
 add_executable (sg_time_test "sgtime_test.cpp")
 target_link_libraries(sg_time_test SGTime)
 
 add_executable (event_test "event_test.cpp")
-target_link_libraries(event_test SGEventManager Utils SGLog)
+target_link_libraries (event_test SGEventManager Utils SGLog)
+
+add_executable (glm_test "glm_test.cpp")

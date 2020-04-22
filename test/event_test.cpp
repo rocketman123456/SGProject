@@ -1,6 +1,6 @@
 #include "SGWorkerThread.h"
 #include "SGLog.h"
-#include "Fault.h"
+#include "AssertFault.h"
 #include <iostream>
 
 using namespace SG;

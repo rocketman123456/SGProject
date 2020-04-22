@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <sigslot/signal.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "SGIRuntimeModule.h"
 #include "Shader.h"
@@ -15,7 +18,6 @@ namespace SG
 		virtual void Finalize();
 
 		virtual void Tick();
-
 	public:
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 	protected:

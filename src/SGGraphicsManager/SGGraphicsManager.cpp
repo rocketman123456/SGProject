@@ -12,6 +12,8 @@ namespace SG
 	extern SGIApplication* g_pApp;
 }
 
+float mixValue = 0.2f;
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -25,6 +27,7 @@ int SG::SGGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
+		// TODO : use uniform event manager to trigger an event
 		m_SigEnd.connect(&SGIApplication::SetIsQuit, g_pApp);
 
 		glfwInit();
@@ -151,8 +154,7 @@ int SG::SGGraphicsManager::Initialize()
 
 		LOG_INFO("SGGraphicsManager Initialize");
 	} while (false);
-	
-	return 0;
+	return result;
 }
 
 void SG::SGGraphicsManager::Finalize()
@@ -183,9 +185,20 @@ void SG::SGGraphicsManager::Tick()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_Texture2);
 
-    // draw our first triangle
+	// change picture mixture
+	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
+
+	// create transformations
+	glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+	transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	m_Shader->setFloat("mixValue", mixValue);
+	m_Shader->setMat4("transform", transform);
+
+	// draw our first triangle
 	m_Shader->use();
-    glBindVertexArray(m_VAO);
+	glBindVertexArray(m_VAO);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
