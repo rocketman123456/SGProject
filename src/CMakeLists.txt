@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.8)
 
+add_subdirectory ("Utils")
+
 add_subdirectory ("SGLog")
 add_subdirectory ("SGProject")
 add_subdirectory ("SGTime")
