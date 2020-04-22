@@ -185,19 +185,26 @@ void SG::SGGraphicsManager::Tick()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_Texture2);
 
+	m_Shader->use();
+
 	// change picture mixture
 	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
 
 	// create transformations
-	glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-	transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-	transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float)m_witdh / (float)m_height, 0.1f, 100.0f);
 
 	m_Shader->setFloat("mixValue", mixValue);
-	m_Shader->setMat4("transform", transform);
+	m_Shader->setMat4("model", model);
+	m_Shader->setMat4("view", view);
+	m_Shader->setMat4("projection", projection);
 
 	// draw our first triangle
-	m_Shader->use();
+	
 	glBindVertexArray(m_VAO);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
