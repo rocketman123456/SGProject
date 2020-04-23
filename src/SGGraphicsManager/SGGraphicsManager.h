@@ -29,8 +29,8 @@ namespace SG
 		uint32_t m_Texture2;
 		Shader* m_Shader;
 
-		int32_t m_witdh = 1600;
-		int32_t m_height = 900;
+		int32_t m_Witdh;
+		int32_t m_Height;
 	};
 
 	extern SGIRuntimeModule* g_pGraphicsManager;

@@ -70,46 +70,14 @@ glm::vec3 cubePositions[] = {
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
-
 int SG::SGGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
-		// TODO : use uniform event manager to trigger an event
-		m_SigEnd.connect(&SGIApplication::SetIsQuit, g_pApp);
-
-		glfwInit();
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-		glfwWindowHint(GLFW_RESIZABLE, false);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		LOG_INFO("OpenGL Version %d.%d", 4, 5)
-
-			m_Window = glfwCreateWindow(m_witdh, m_height, "SGProject", NULL, NULL);
-		if (m_Window == NULL)
-		{
-			LOG_ERROR("Failed to create GLFW window");
-			glfwTerminate();
-			result = 1;
-			break;
-		}
-		glfwMakeContextCurrent(m_Window);
-		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
-
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			LOG_ERROR("Failed to initialize GLAD");
-			result = 2;
-			break;
-		}
+		// get glfw from global app
+		m_Witdh = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
+		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
+		m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
 
 		// configure global opengl state
 		// -----------------------------
@@ -192,9 +160,9 @@ int SG::SGGraphicsManager::Initialize()
 		m_Shader->use();
 		m_Shader->setInt("texture1", 0);
 		m_Shader->setInt("texture2", 1);
-
-		LOG_INFO("SGGraphicsManager Initialize");
 	} while (false);
+
+	LOG_INFO("SGGraphicsManager Initialize");
 	return result;
 }
 
@@ -206,20 +174,11 @@ void SG::SGGraphicsManager::Finalize()
     glDeleteVertexArrays(1, &m_VAO);
     glDeleteBuffers(1, &m_VBO);
 
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
-	glfwTerminate();
-
 	LOG_INFO("SGGraphicsManager Finalize");
 }
 
 void SG::SGGraphicsManager::Tick()
 {
-	if (glfwWindowShouldClose(m_Window))
-	{
-		LOG_INFO("Close Window");
-		m_SigEnd(true);
-	}
 	// render
 	// ------
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -240,7 +199,7 @@ void SG::SGGraphicsManager::Tick()
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)m_witdh / (float)m_height, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
 
 	m_Shader->setFloat("mixValue", mixValue);
 	m_Shader->setMat4("view", view);
