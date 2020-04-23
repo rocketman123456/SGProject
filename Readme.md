@@ -9,6 +9,7 @@
 * igslot
 
 # main loop structure
+受到从零开始手敲次世代游戏引擎启发
 ```
 int main(int argc, char** argv) {
 	int ret;
