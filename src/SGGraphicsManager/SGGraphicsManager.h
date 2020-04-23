@@ -24,7 +24,7 @@ namespace SG
 		sigslot::signal<bool> m_SigEnd;
 
 		GLFWwindow* m_Window;
-		uint32_t m_VBO, m_VAO, m_EBO;
+		uint32_t m_VBO, m_VAO;
 		uint32_t m_Texture1;
 		uint32_t m_Texture2;
 		Shader* m_Shader;
