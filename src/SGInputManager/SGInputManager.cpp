@@ -10,11 +10,49 @@ namespace SG
 	extern SGIRuntimeModule* g_pGraphicsManager;
 }
 
+float lastX = 0.0f;
+float lastY = 0.0f;
+bool firstMouse = true;
+
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	static_cast<SG::SGInputManager*>(SG::g_pInputManager)->GetCamera()->ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	static_cast<SG::SGInputManager*>(SG::g_pInputManager)->GetCamera()->ProcessMouseScroll(yoffset);
+}
+
 int SG::SGInputManager::Initialize()
 {
+	m_Witdh = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
+	m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
 	m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
 	ASSERT_TRUE(m_Window);
 	m_Camera = new SGCamera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(m_Window, mouse_callback);
+	glfwSetScrollCallback(m_Window, scroll_callback);
+
 	LOG_INFO("SGInputManager Initialize");
 	return 0;
 }

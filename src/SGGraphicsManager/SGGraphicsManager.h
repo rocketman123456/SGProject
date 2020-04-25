@@ -23,14 +23,16 @@ namespace SG
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 		SGShader* GetShader() const { return m_Shader; }
 		SGCamera* GetCamera() const { return m_Camera; }
+		int32_t GetWindowWidth() const { return m_Witdh; }
+		int32_t GetWindowHeight() const { return m_Height; }
 	protected:
 		GLFWwindow* m_Window;
+		SGShader* m_Shader;
+		SGCamera* m_Camera;
+
 		uint32_t m_VBO, m_VAO;
 		uint32_t m_Texture1;
 		uint32_t m_Texture2;
-
-		SGShader* m_Shader;
-		SGCamera* m_Camera;
 
 		int32_t m_Witdh;
 		int32_t m_Height;
