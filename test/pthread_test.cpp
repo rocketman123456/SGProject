@@ -1,4 +1,4 @@
-#include <pthread/pthread.h>
+#include <pthread.h>
 #include <stdio.h>
 
 constexpr auto NUM_THREADS = 5;

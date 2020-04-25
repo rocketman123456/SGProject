@@ -1,10 +1,10 @@
 #include "SGLog.h"
 #define SPDLOG_HEADER_ONLY
+#include <spdlog/spdlog.h>
 #include <spdlog/logger.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/msvc_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
 
 #define LOG_STR_BUFFER_LEN 2000
 static std::unique_ptr<spdlog::logger> g_logger;

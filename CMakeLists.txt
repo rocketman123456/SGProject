@@ -13,12 +13,26 @@ project ("SGProject")
 set (SGProject_VERSION_MAJOR 0)
 set (SGProject_VERSION_MINOR 1)
 
+find_package(stb REQUIRED)
+find_package(fmt REQUIRED)
+find_package(glm REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(pthread REQUIRED)
+find_package(Sqlite3 CONFIG REQUIRED)
+find_package(unofficial-libuv CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h"
 )
 
 include_directories(
+	"${EIGEN3_INCLUDE_DIRS}"
+#	"${SQLite3_INCLUDE_DIRS}"
+	"${PTHREAD_INCLUDE_DIR}"
 	"${PROJECT_SOURCE_DIR}/Config"
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
 	"${PROJECT_SOURCE_DIR}/src"
@@ -40,7 +54,6 @@ link_directories(
     "${PROJECT_SOURCE_DIR}/3rdParty/lib"
 )
 
-add_subdirectory ("3rdParty")
 add_subdirectory ("src")
 add_subdirectory ("Application")
 add_subdirectory ("test")
