@@ -1,13 +1,14 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <sigslot/signal.hpp>
+//#include <sigslot/signal.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SGIRuntimeModule.h"
-#include "Shader.h"
+#include "SGShader.h"
+#include "SGCamera.h"
 
 namespace SG
 {
@@ -20,14 +21,16 @@ namespace SG
 		virtual void Tick();
 	public:
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
+		SGShader* GetShader() const { return m_Shader; }
+		SGCamera* GetCamera() const { return m_Camera; }
 	protected:
-		sigslot::signal<bool> m_SigEnd;
-
 		GLFWwindow* m_Window;
 		uint32_t m_VBO, m_VAO;
 		uint32_t m_Texture1;
 		uint32_t m_Texture2;
-		Shader* m_Shader;
+
+		SGShader* m_Shader;
+		SGCamera* m_Camera;
 
 		int32_t m_Witdh;
 		int32_t m_Height;

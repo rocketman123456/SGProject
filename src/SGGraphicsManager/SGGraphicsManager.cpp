@@ -1,8 +1,10 @@
 #include "SGGraphicsManager.h"
 #include "SGConfig.h"
 #include "SGLog.h"
-#include "SGBaseApplication.h"
 #include "SGCubeData.h"
+#include "SGBaseApplication.h"
+#include "SGInputManager.h"
+#include "AssertFault.h"
 
 #include <string>
 #define STB_IMAGE_IMPLEMENTATION
@@ -11,6 +13,7 @@
 namespace SG
 {
 	extern SGIApplication* g_pApp;
+	extern SGIRuntimeModule* g_pInputManager;
 }
 
 // texture mix value
@@ -37,6 +40,10 @@ int SG::SGGraphicsManager::Initialize()
 		m_Witdh = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
 		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
 		m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
+		ASSERT_TRUE(m_Window);
+
+		m_Camera = static_cast<SGInputManager*>(g_pInputManager)->GetCamera();
+		ASSERT_TRUE(m_Camera);
 
 		// configure global opengl state
 		// -----------------------------
@@ -45,9 +52,9 @@ int SG::SGGraphicsManager::Initialize()
 		// build and compile our shader program
 		// ------------------------------------
 		std::string base = SGProject_SOURCE_DIR;
-		std::string vs = base + "/Shaders/shaderVS.glsl";
-		std::string fs = base + "/Shaders/shaderFS.glsl";
-		m_Shader = new Shader(vs.c_str(), fs.c_str());
+		std::string vs = base + "/Assets/Shaders/shaderVS.glsl";
+		std::string fs = base + "/Assets/Shaders/shaderFS.glsl";
+		m_Shader = new SGShader(vs.c_str(), fs.c_str());
 
 		// set up vertex data (and buffer(s)) and configure vertex attributes
 		// ------------------------------------------------------------------
@@ -156,16 +163,11 @@ void SG::SGGraphicsManager::Tick()
 	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
 
 	// camera/view transformation
-	glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-	float radius = 10.0f;
-	float camX = sin(glfwGetTime()) * radius;
-	float camZ = cos(glfwGetTime()) * radius;
-	view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 view = m_Camera->GetViewMatrix();
 	
 	// create transformations
 	glm::mat4 projection = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
 
 	m_Shader->setFloat("mixValue", mixValue);
 	m_Shader->setMat4("view", view);

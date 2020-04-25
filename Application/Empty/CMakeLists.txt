@@ -12,6 +12,8 @@ target_link_libraries(SGEmpty
 	SGTime
 	SGBaseApplication
 	SGGraphicsManager
+	SGInputManager
 	SGEventManager
 	SGMultiThread
+	Utils
 )

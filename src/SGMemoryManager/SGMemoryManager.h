@@ -1,0 +1,6 @@
+#pragma once
+
+namepsace SG
+{
+
+}

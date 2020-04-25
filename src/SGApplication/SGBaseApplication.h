@@ -19,7 +19,7 @@ namespace SG
 		int32_t GetWindowHeight() const { return m_Height; }
 
 	protected:
-		GLFWwindow* m_Window;
+		GLFWwindow* m_Window = 0;
 		int32_t m_Witdh = 1600;
 		int32_t m_Height = 900;
 	};

@@ -27,6 +27,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
 	"${PROJECT_SOURCE_DIR}/src/SGFileManager"
 	"${PROJECT_SOURCE_DIR}/src/SGGraphicsManager"
+	"${PROJECT_SOURCE_DIR}/src/SGInputManager"
 	"${PROJECT_SOURCE_DIR}/src/SGInterface"
 	"${PROJECT_SOURCE_DIR}/src/SGLog"
 	"${PROJECT_SOURCE_DIR}/src/SGMemoryManager"
