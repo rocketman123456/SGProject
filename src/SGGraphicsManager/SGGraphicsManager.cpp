@@ -90,12 +90,13 @@ void SG::SGGraphicsManager::Tick()
 
 	// activate shader
 	m_LightingShader->use();
+	m_LightingShader->setFloat("mixValue", mixValue);
 	m_LightingShader->setVec3("lightPos", lightPos);
 	m_LightingShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	m_LightingShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	m_LightingShader->setMat4("view", view);
 	m_LightingShader->setMat4("projection", projection);
-	m_LightingShader->setFloat("mixValue", mixValue);
+	m_LightingShader->setVec3("viewPos", m_Camera->Position);
 
 	// TODO: load model and render
 	// draw our first triangle

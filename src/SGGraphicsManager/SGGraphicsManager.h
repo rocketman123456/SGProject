@@ -36,7 +36,6 @@ namespace SG
 	protected:
 		GLFWwindow* m_Window;
 		SGCamera* m_Camera;
-
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
 
