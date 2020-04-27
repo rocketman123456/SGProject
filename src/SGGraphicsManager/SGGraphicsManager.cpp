@@ -1,6 +1,4 @@
 #include "SGGraphicsManager.h"
-#include "SGConfig.h"
-#include "SGLog.h"
 #include "SGCubeData.h"
 #include "SGBaseApplication.h"
 #include "SGInputManager.h"
@@ -47,85 +45,11 @@ int SG::SGGraphicsManager::Initialize()
 
 		// configure global opengl state
 		// -----------------------------
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);	
 
-		// build and compile our shader program
-		// ------------------------------------
-		std::string base = SGProject_ASSET_DIR;
-		std::string vs = base + "Shaders/shaderVS.glsl";
-		std::string fs = base + "Shaders/shaderFS.glsl";
-		m_Shader = new SGShader(vs.c_str(), fs.c_str());
-
-		// set up vertex data (and buffer(s)) and configure vertex attributes
-		// ------------------------------------------------------------------
-		glGenVertexArrays(1, &m_VAO);
-		glGenBuffers(1, &m_VBO);
-		glBindVertexArray(m_VAO);
-
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		// position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-		// texture coord attribute
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
-		// load picture
-		// texture 1
-		// ---------
-		int width, height, nrChannels;
-		glGenTextures(1, &m_Texture1);
-		glBindTexture(GL_TEXTURE_2D, m_Texture1);
-		// set the texture wrapping/filtering options (on the currently bound texture object)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// load and generate the texture
-		//stbi_set_flip_vertically_on_load(true);
-		std::string pic1 = base + "Textures/container.jpg";
-		unsigned char* data = stbi_load(pic1.c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
-		}
-		else
-		{
-			LOG_ERROR("Failed to load texture %s", pic1.c_str());
-		}
-		stbi_image_free(data);
-		// texture 2
-		// ---------
-		glGenTextures(1, &m_Texture2);
-		glBindTexture(GL_TEXTURE_2D, m_Texture2);
-		// set the texture wrapping parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		// set texture filtering parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// load image, create texture and generate mipmaps
-		stbi_set_flip_vertically_on_load(true);
-		std::string pic2 = base + "Textures/awesomeface.png";
-		data = stbi_load(pic2.c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
-		}
-		else
-		{
-			LOG_ERROR("Failed to load texture %s", pic2.c_str());
-		}
-		stbi_image_free(data);
-
-		m_Shader->use();
-		m_Shader->setInt("texture1", 0);
-		m_Shader->setInt("texture2", 1);
+		GenerateShader();
+		GenerateData();
+		GenerateTexture();
 	} while (false);
 
 	LOG_INFO("SGGraphicsManager Initialize");
@@ -136,8 +60,8 @@ void SG::SGGraphicsManager::Finalize()
 {
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------
-	delete m_Shader;
-    glDeleteVertexArrays(1, &m_VAO);
+	delete m_LightingShader;
+    glDeleteVertexArrays(1, &m_cubeVAO);
     glDeleteBuffers(1, &m_VBO);
 
 	LOG_INFO("SGGraphicsManager Finalize");
@@ -145,7 +69,7 @@ void SG::SGGraphicsManager::Finalize()
 
 void SG::SGGraphicsManager::Tick()
 {
-	// render
+	// render start
 	// ------
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -156,39 +80,55 @@ void SG::SGGraphicsManager::Tick()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_Texture2);
 
-	// activate shader
-	m_Shader->use();
-
 	// change picture mixture
 	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
-
-	// camera/view transformation
+	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = m_Camera->GetViewMatrix();
-	
-	// projection transformation
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
 
-	m_Shader->setFloat("mixValue", mixValue);
-	m_Shader->setMat4("view", view);
-	m_Shader->setMat4("projection", projection);
+	// activate shader
+	m_LightingShader->use();
+	m_LightingShader->setVec3("lightPos", lightPos);
+	m_LightingShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+	m_LightingShader->setMat4("view", view);
+	m_LightingShader->setMat4("projection", projection);
+	m_LightingShader->setFloat("mixValue", mixValue);
 
 	// TODO: load model and render
 	// draw our first triangle
-	glBindVertexArray(m_VAO);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBindVertexArray(m_cubeVAO);
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		// calculate the model matrix for each object and pass it to shader before drawing
 		float angle = 20.0f * i;
-		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::mat4(1.0f);
+		model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[i]);
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		m_Shader->setMat4("model", model);
-
+		m_LightingShader->setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
+
+	// also draw the lamp object
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, lightPos);
+	model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+	m_LampShader->use();
+	m_LampShader->setMat4("projection", projection);
+	m_LampShader->setMat4("view", view);
+	m_LampShader->setMat4("model", model);
+	m_LampShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	glBindVertexArray(m_lightVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	// draw outline of the lamp
+	m_LampShader->setVec3("lightColor", 0.0f, 0.0f, 0.0f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// TODO: add Debug UI here -- imgui
 
@@ -196,4 +136,107 @@ void SG::SGGraphicsManager::Tick()
 	// -------------------------------------------------------------------------------
 	glfwSwapBuffers(m_Window);
 	glfwPollEvents();
+}
+
+void SG::SGGraphicsManager::GenerateShader()
+{
+	// build and compile our shader program
+	// ------------------------------------
+	std::string vs1 = m_BaseAssetDir + "Shaders/LightShaderVS.glsl";
+	std::string fs1 = m_BaseAssetDir + "Shaders/LightShaderFS.glsl";
+	m_LightingShader = new SGShader(vs1.c_str(), fs1.c_str());
+	ASSERT_TRUE(m_LightingShader);
+	std::string vs2 = m_BaseAssetDir + "Shaders/LampShaderVS.glsl";
+	std::string fs2 = m_BaseAssetDir + "Shaders/LampShaderFS.glsl";
+	m_LampShader = new SGShader(vs2.c_str(), fs2.c_str());
+	ASSERT_TRUE(m_LampShader);
+}
+
+void SG::SGGraphicsManager::GenerateData()
+{
+	// set up vertex data (and buffer(s)) and configure vertex attributes
+	// ------------------------------------------------------------------
+	glGenVertexArrays(1, &m_cubeVAO);
+	glGenBuffers(1, &m_VBO);
+	glBindVertexArray(m_cubeVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	// light VAO generation
+	glGenVertexArrays(1, &m_lightVAO);
+	glBindVertexArray(m_lightVAO);
+	// we only need to bind to the VBO, the container's VBO's data already contains the data.
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	// set the vertex attributes (only position data for our lamp)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+}
+
+void SG::SGGraphicsManager::GenerateTexture()
+{
+	// load picture
+	// texture 1
+	// ---------
+	int width, height, nrChannels;
+	glGenTextures(1, &m_Texture1);
+	glBindTexture(GL_TEXTURE_2D, m_Texture1);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load and generate the texture
+	//stbi_set_flip_vertically_on_load(true);
+	std::string pic1 = m_BaseAssetDir + "Textures/container.jpg";
+	unsigned char* data = stbi_load(pic1.c_str(), &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		LOG_ERROR("Failed to load texture %s", pic1.c_str());
+	}
+	stbi_image_free(data);
+	// texture 2
+	// ---------
+	glGenTextures(1, &m_Texture2);
+	glBindTexture(GL_TEXTURE_2D, m_Texture2);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	stbi_set_flip_vertically_on_load(true);
+	std::string pic2 = m_BaseAssetDir + "Textures/awesomeface.png";
+	data = stbi_load(pic2.c_str(), &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		LOG_ERROR("Failed to load texture %s", pic2.c_str());
+	}
+	stbi_image_free(data);
+
+	m_LightingShader->use();
+	m_LightingShader->setInt("texture1", 0);
+	m_LightingShader->setInt("texture2", 1);
 }

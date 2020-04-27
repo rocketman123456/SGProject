@@ -25,6 +25,7 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 #target_link_libraries(main PRIVATE fmt::fmt fmt::fmt-header-only)
 #target_link_libraries(main PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
@@ -36,6 +37,7 @@ find_package(Bullet CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE glad::glad)
 #target_link_libraries(main PRIVATE imgui::imgui)
 #target_link_libraries(main PRIVATE LinearMath Bullet3Common BulletDynamics BulletSoftBody)
+#target_link_libraries(main PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
