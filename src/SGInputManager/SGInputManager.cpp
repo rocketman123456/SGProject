@@ -10,6 +10,7 @@ namespace SG
 	extern SGIRuntimeModule* g_pGraphicsManager;
 }
 
+// TODO: use struct to store data
 float lastX = 0.0f;
 float lastY = 0.0f;
 bool firstMouse = true;
@@ -31,6 +32,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
+	// TODO: use event to send data, not direct call
 	static_cast<SG::SGInputManager*>(SG::g_pInputManager)->GetCamera()->ProcessMouseMovement(xoffset, yoffset);
 }
 

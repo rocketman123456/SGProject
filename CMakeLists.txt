@@ -1,6 +1,4 @@
 ﻿# CMakeList.txt: 顶层 CMake 项目文件，在此处执行全局配置
-# 并包含子项目。
-#
 cmake_minimum_required (VERSION 3.8)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -12,17 +10,32 @@ set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on w
 project ("SGProject")
 set (SGProject_VERSION_MAJOR 0)
 set (SGProject_VERSION_MINOR 1)
+set (PROJECT_ASSET_DIR ${PROJECT_SOURCE_DIR})
 
 find_package(stb REQUIRED)
-find_package(fmt REQUIRED)
-find_package(glm REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
-find_package(Eigen3 CONFIG REQUIRED)
-find_package(spdlog CONFIG REQUIRED)
 find_package(pthread REQUIRED)
-find_package(Sqlite3 CONFIG REQUIRED)
+
+#find_package(fmt CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
+find_package(sqlite3 CONFIG REQUIRED)
 find_package(unofficial-libuv CONFIG REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(Bullet CONFIG REQUIRED)
+
+#target_link_libraries(main PRIVATE fmt::fmt fmt::fmt-header-only)
+#target_link_libraries(main PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
+#target_link_libraries(main PRIVATE Eigen3::Eigen)
+#target_link_libraries(main PRIVATE glm)
+#target_link_libraries(main PRIVATE sqlite3)
+#target_link_libraries(main PRIVATE unofficial::libuv::libuv)
+#target_link_libraries(main PRIVATE glfw)
+#target_link_libraries(main PRIVATE glad::glad)
+#target_link_libraries(main PRIVATE imgui::imgui)
+#target_link_libraries(main PRIVATE LinearMath Bullet3Common BulletDynamics BulletSoftBody)
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
@@ -30,11 +43,12 @@ configure_file (
 )
 
 include_directories(
-	"${EIGEN3_INCLUDE_DIRS}"
-#	"${SQLite3_INCLUDE_DIRS}"
 	"${PTHREAD_INCLUDE_DIR}"
-	"${PROJECT_SOURCE_DIR}/Config"
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
+)
+
+include_directories(
+	"${PROJECT_SOURCE_DIR}/Config"
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/Utils"
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
@@ -48,10 +62,6 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGMultiThread"
 	"${PROJECT_SOURCE_DIR}/src/SGProject"
 	"${PROJECT_SOURCE_DIR}/src/SGTime"
-)
-
-link_directories(
-    "${PROJECT_SOURCE_DIR}/3rdParty/lib"
 )
 
 add_subdirectory ("src")

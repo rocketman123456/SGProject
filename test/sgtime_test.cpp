@@ -9,6 +9,6 @@ using namespace SG;
 int main(void)
 {
     SGTime time;
-    time.DSPTime();
+    time.DisplayTime();
     return 0;
 }

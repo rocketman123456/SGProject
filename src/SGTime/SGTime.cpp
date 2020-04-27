@@ -1,20 +1,39 @@
 #include "SGTime.h"
 #include <iostream>
+#include <iomanip> // put_time
+#include <ctime>   // localtime
+#include <sstream> // stringstream
+
 using namespace std;
 
-SG::SGTime::SGTime()
+void SG::SGTime::Update(double dtReal)
 {
-	nowtime = time(NULL); //获取日历时间
-	local = localtime(&nowtime);  //获取当前系统时间
+	if (!m_isPause)
+	{
+		m_TimeCurrent += dtReal * m_TimeScale;
+	}
 }
 
-SG::SGTime::~SGTime()
+void SG::SGTime::SingleStep()
 {
-
+	if (!m_isPause)
+	{
+		m_TimeCurrent += (1.0f / 30.0f) * m_TimeScale;
+	}
 }
 
-void SG::SGTime::DSPTime() {
-    char* pxq[] = { "日","一","二","三","四","五","六" };
-    cout << local->tm_year + 1900 << "年" << local->tm_mon + 1 << "月" << local->tm_mday << "日 ";
-    cout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ";
+void SG::SGTime::DisplayTime()
+{
+	GenerateDateString();
+	cout << GetDateString() << endl;
+}
+
+void SG::SGTime::GenerateDateString()
+{
+	auto now = std::chrono::system_clock::now();
+	auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+	m_DateString = ss.str();
 }

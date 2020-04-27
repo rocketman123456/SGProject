@@ -1,12 +1,16 @@
 # Simple Game Project 
 * use VS2019+CMake
 
-# 3rdParty 
-* Eigen-3.3.7 
-* pthread-3.0.0 
-* spdlog-1.5.0 
-* sqlite-3.31.1
-* igslot
+# 3rdParty
+使用vcpkg进行安装
+.\vcpkg install --triplet x64-windows *
+* Eigen
+* pthread
+* spdlog
+* sqlite3
+* sigslot
+* bullet
+* imgui
 
 # main loop structure
 受到从零开始手敲次世代游戏引擎启发

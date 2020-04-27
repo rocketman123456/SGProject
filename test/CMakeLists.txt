@@ -4,7 +4,6 @@ add_executable (pthread_test "pthread_test.cpp")
 target_link_libraries (pthread_test ${PTHREAD_LIBRARIES})
 
 add_executable (sqlite_test "sqlite_test.cpp")
-#target_link_libraries (sqlite_test ${SQLite3_LIBRARIES})
 target_link_libraries (sqlite_test sqlite3)
 
 add_executable (sg_time_test "sgtime_test.cpp")

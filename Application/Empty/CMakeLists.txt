@@ -3,12 +3,11 @@ cmake_minimum_required (VERSION 3.8)
 add_executable (SGEmpty EmptyApplication.cpp)
 target_link_libraries(SGEmpty
 	${PTHREAD_LIBRARIES}
-#	${SQLite3_LIBRARIES}
 	sqlite3
-	glfw
 	unofficial::libuv::libuv
-	glad::glad
+	glm glfw glad::glad imgui::imgui
 	Eigen3::Eigen
+	LinearMath Bullet3Common BulletDynamics BulletSoftBody
 )
 target_link_libraries(SGEmpty
 	SGProject

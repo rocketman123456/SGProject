@@ -51,9 +51,9 @@ int SG::SGGraphicsManager::Initialize()
 
 		// build and compile our shader program
 		// ------------------------------------
-		std::string base = SGProject_SOURCE_DIR;
-		std::string vs = base + "/Assets/Shaders/shaderVS.glsl";
-		std::string fs = base + "/Assets/Shaders/shaderFS.glsl";
+		std::string base = SGProject_ASSET_DIR;
+		std::string vs = base + "Shaders/shaderVS.glsl";
+		std::string fs = base + "Shaders/shaderFS.glsl";
 		m_Shader = new SGShader(vs.c_str(), fs.c_str());
 
 		// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -85,7 +85,7 @@ int SG::SGGraphicsManager::Initialize()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// load and generate the texture
 		//stbi_set_flip_vertically_on_load(true);
-		std::string pic1 = base + "/Assets/Textures/container.jpg";
+		std::string pic1 = base + "Textures/container.jpg";
 		unsigned char* data = stbi_load(pic1.c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
@@ -109,7 +109,7 @@ int SG::SGGraphicsManager::Initialize()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// load image, create texture and generate mipmaps
 		stbi_set_flip_vertically_on_load(true);
-		std::string pic2 = base + "/Assets/Textures/awesomeface.png";
+		std::string pic2 = base + "Textures/awesomeface.png";
 		data = stbi_load(pic2.c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
@@ -165,7 +165,7 @@ void SG::SGGraphicsManager::Tick()
 	// camera/view transformation
 	glm::mat4 view = m_Camera->GetViewMatrix();
 	
-	// create transformations
+	// projection transformation
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
 
@@ -173,6 +173,7 @@ void SG::SGGraphicsManager::Tick()
 	m_Shader->setMat4("view", view);
 	m_Shader->setMat4("projection", projection);
 
+	// TODO: load model and render
 	// draw our first triangle
 	glBindVertexArray(m_VAO);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
