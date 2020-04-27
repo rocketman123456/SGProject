@@ -45,7 +45,9 @@ int SG::SGGraphicsManager::Initialize()
 
 		// configure global opengl state
 		// -----------------------------
-		glEnable(GL_DEPTH_TEST);	
+		glEnable(GL_DEPTH_TEST);
+		// 用多重采样来解决锯齿问题
+		glEnable(GL_MULTISAMPLE);
 
 		GenerateShader();
 		GenerateData();
@@ -91,12 +93,27 @@ void SG::SGGraphicsManager::Tick()
 	// activate shader
 	m_LightingShader->use();
 	m_LightingShader->setFloat("mixValue", mixValue);
-	m_LightingShader->setVec3("lightPos", lightPos);
-	m_LightingShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	m_LightingShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	m_LightingShader->setMat4("view", view);
 	m_LightingShader->setMat4("projection", projection);
 	m_LightingShader->setVec3("viewPos", m_Camera->Position);
+
+	m_LightingShader->setVec3("material.ambient", silver.ambient);
+	m_LightingShader->setVec3("material.diffuse", silver.diffuse);
+	m_LightingShader->setVec3("material.specular", silver.specular);
+	m_LightingShader->setFloat("material.shininess", silver.shininess);
+
+	glm::vec3 lightColor = glm::vec3(1.0f);
+	//lightColor.x = sin(glfwGetTime() * 2.0f);
+	//lightColor.y = sin(glfwGetTime() * 0.7f);
+	//lightColor.z = sin(glfwGetTime() * 1.3f);
+
+	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // 降低影响
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
+
+	m_LightingShader->setVec3("light.position", lightPos);
+	m_LightingShader->setVec3("light.ambient", ambientColor);
+	m_LightingShader->setVec3("light.diffuse", diffuseColor); // 将光照调暗了一些以搭配场景
+	m_LightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 	// TODO: load model and render
 	// draw our first triangle
@@ -109,7 +126,7 @@ void SG::SGGraphicsManager::Tick()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[i]);
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		m_LightingShader->setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}

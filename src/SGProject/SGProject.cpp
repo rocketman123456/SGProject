@@ -5,11 +5,14 @@ using namespace SG;
 
 int SGMain()
 {
-	SGLog::GetSingleton().Initialize();
-	LOG_INFO("Hello SGProject.");
-
 	int ret;
 	do {
+		if ((ret = SGLog::GetSingleton().Initialize()) != 0)
+		{
+			break;
+		}
+		LOG_INFO("Hello SGProject.");
+
 		if ((ret = g_pApp->Initialize()) != 0) 
 		{
 			LOG_ERROR("Application Initialize Failed.");

@@ -28,7 +28,6 @@ int SG::SGLog::Initialize()
 	file_sink->set_pattern("[%t][%^%l%$]%v");
 
 	g_logger.reset(new spdlog::logger("SGProject", { msvc_sink, file_sink, console_sink }));
-	//g_logger.reset(new spdlog::logger("SGProject", { msvc_sink, file_sink, console_sink }));
 	g_logger->set_level(spdlog::level::trace);  // message showing filter
 	return 0;
 }

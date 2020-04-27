@@ -6,17 +6,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "SGLog.h"
 #include "SGIRuntimeModule.h"
 #include "SGShader.h"
 #include "SGCamera.h"
 #include "SGConfig.h"
-#include "SGLog.h"
+#include "SGLight.h"
+#include "SGMaterial.h"
+#include "SGMaterialData.h"
 
 namespace SG
 {
 	class SGGraphicsManager : implements SGIRuntimeModule
 	{
 	public:
+		SGGraphicsManager(const std::string& asset = SGProject_ASSET_DIR) :m_BaseAssetDir(asset) {}
 		virtual int Initialize() override;
 		virtual void Finalize() override;
 		virtual void Tick() override;
@@ -35,17 +39,18 @@ namespace SG
 
 	protected:
 		GLFWwindow* m_Window;
+		int32_t m_Witdh;
+		int32_t m_Height;
+
 		SGCamera* m_Camera;
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
 
-		std::string m_BaseAssetDir = SGProject_ASSET_DIR;
-		uint32_t m_VBO, m_cubeVAO, m_lightVAO;
+		std::string m_BaseAssetDir;
+		uint32_t m_VBO;
+		uint32_t m_cubeVAO, m_lightVAO;
 		uint32_t m_Texture1;
 		uint32_t m_Texture2;
-
-		int32_t m_Witdh;
-		int32_t m_Height;
 	};
 
 	extern SGIRuntimeModule* g_pGraphicsManager;

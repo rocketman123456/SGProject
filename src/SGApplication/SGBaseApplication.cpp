@@ -26,6 +26,7 @@ int SG::SGBaseApplication::Initialize()
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_RESIZABLE, false);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_SAMPLES, 4);
 		LOG_INFO("OpenGL Version %d.%d", 4, 5)
 
 		m_Window = glfwCreateWindow(m_Witdh, m_Height, "SGProject", NULL, NULL);

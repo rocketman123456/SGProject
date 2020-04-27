@@ -1,5 +1,6 @@
 #pragma once
 #include "SGDefine.h"
+#include "SGIRuntimeModule.h"
 
 namespace SG
 {
@@ -7,7 +8,7 @@ namespace SG
     Interface SGSingleton
     {
     public:
-        SGSingleton() {}
+        explicit SGSingleton() {}
         ~SGSingleton() {}
 
         static T& GetSingleton()

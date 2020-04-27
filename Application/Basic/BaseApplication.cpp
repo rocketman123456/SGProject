@@ -1,7 +1,7 @@
 #include "SGBaseApplication.h"
-#include "SGGraphicsManager.h"
 #include "SGEventManager.h"
 #include "SGInputManager.h"
+#include "SGGraphicsManager.h"
 
 namespace SG
 {
