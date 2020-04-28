@@ -1,11 +1,4 @@
 #pragma once
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-//#include <sigslot/signal.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "SGLog.h"
 #include "SGIRuntimeModule.h"
 #include "SGShader.h"
@@ -14,11 +7,20 @@
 #include "SGLight.h"
 #include "SGMaterial.h"
 #include "SGMaterialData.h"
+#include "SGMemoryMacros.h"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+//#include <sigslot/signal.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace SG
 {
 	class SGGraphicsManager : implements SGIRuntimeModule
 	{
+		SG_MEMORYPOOL_DECLARATION(0);
 	public:
 		SGGraphicsManager(const std::string& asset = SGProject_ASSET_DIR) :m_BaseAssetDir(asset) {}
 		virtual int Initialize() override;

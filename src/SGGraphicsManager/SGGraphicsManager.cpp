@@ -1,12 +1,15 @@
 #include "SGGraphicsManager.h"
-#include "SGCubeData.h"
 #include "SGBaseApplication.h"
 #include "SGInputManager.h"
 #include "AssertFault.h"
+#include "SGCubeData.h"
 
 #include <string>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+// texture mix value
+float mixValue = 0.2f;
 
 namespace SG
 {
@@ -14,26 +17,14 @@ namespace SG
 	extern SGIRuntimeModule* g_pInputManager;
 }
 
-// texture mix value
-float mixValue = 0.2f;
-// world space positions of our cubes
-glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
-};
+SG_MEMORYPOOL_DEFINITION(SG::SGGraphicsManager);
+//SG_MEMORYPOOL_AUTOINIT(SG::SGGraphicsManager, 128);
 
 int SG::SGGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
+		SGGraphicsManager::InitMemoryPool(128);
 		// get glfw from global app
 		m_Width = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
 		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
@@ -62,10 +53,10 @@ void SG::SGGraphicsManager::Finalize()
 {
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------
-	delete m_LightingShader;
     glDeleteVertexArrays(1, &m_cubeVAO);
     glDeleteBuffers(1, &m_VBO);
 
+	SGGraphicsManager::DestroyMemoryPool();
 	LOG_INFO("SGGraphicsManager Finalize");
 }
 

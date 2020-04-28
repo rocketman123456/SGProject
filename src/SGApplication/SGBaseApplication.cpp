@@ -10,6 +10,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+SG_MEMORYPOOL_DEFINITION(SG::SGBaseApplication);
+
 int SG::SGBaseApplication::Initialize(int32_t w, int32_t h)
 {
 	m_Width = w;
@@ -21,6 +23,8 @@ int SG::SGBaseApplication::Initialize()
 {
 	int result = 0;
 	do {
+		SGBaseApplication::InitMemoryPool(64);
+
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -58,6 +62,8 @@ void SG::SGBaseApplication::Finalize()
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
+
+	SGBaseApplication::DestroyMemoryPool();
 	LOG_INFO("SGBaseApplication Finalize");
 }
 

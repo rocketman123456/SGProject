@@ -1,11 +1,15 @@
 #pragma once
 #include "SGIApplication.h"
+#include "SGMemoryMacros.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace SG
 {
-	class SGBaseApplication : implements SGIApplication {
+	class SGBaseApplication : implements SGIApplication 
+	{
+		SG_MEMORYPOOL_DECLARATION(0);
 	public:
 		int Initialize(int32_t w, int32_t h);
 		virtual int Initialize() override;

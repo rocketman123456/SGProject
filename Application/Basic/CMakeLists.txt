@@ -17,6 +17,7 @@ target_link_libraries(SGBase
 	SGGraphicsManager
 	SGInputManager
 	SGEventManager
+	SGMemoryManager
 	SGMultiThread
 	Utils
 )
