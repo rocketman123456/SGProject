@@ -26,12 +26,12 @@ namespace SG
 	public:
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 		SGCamera* GetCamera() const { return m_Camera; }
-		int32_t GetWindowWidth() const { return m_Witdh; }
+		int32_t GetWindowWidth() const { return m_Width; }
 		int32_t GetWindowHeight() const { return m_Height; }
 	protected:
 		GLFWwindow* m_Window = nullptr;
 		SGCamera* m_Camera = nullptr;
-		int32_t m_Witdh;
+		int32_t m_Width;
 		int32_t m_Height;
 
 		bool m_isMouseEnable = true;

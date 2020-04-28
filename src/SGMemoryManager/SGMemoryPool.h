@@ -1,6 +1,6 @@
 #pragma once
 //========================================================================
-// MemoryPool.h : 
+// SGMemoryPool.h : 
 //
 // Part of the GameCode4 Application
 //
@@ -60,7 +60,9 @@
 // Call the Free() function to release a chunk of memory back into the memory pool for reuse.  This
 // will cause the chunk to the inserted to the front of the list, ready for the next bit.
 //--------------------------------------------------------------------------------------------------
-class MemoryPool
+#include <string>
+
+class SGMemoryPool
 {
 	unsigned char** m_ppRawMemoryArray;  // an array of memory blocks, each split up into chunks and connected
 	unsigned char* m_pHead;  // the front of the memory chunk linked list
@@ -76,8 +78,8 @@ class MemoryPool
 
 public:
 	// construction
-	MemoryPool(void);
-	~MemoryPool(void);
+	SGMemoryPool(void);
+	~SGMemoryPool(void);
 	bool Init(unsigned int chunkSize, unsigned int numChunks);
 	void Destroy(void);
 
@@ -112,5 +114,5 @@ private:
 	void SetNext(unsigned char* pBlockToChange, unsigned char* pNewNext);
 
 	// don't allow copy constructor
-	MemoryPool(const MemoryPool& memPool) {}
+	SGMemoryPool(const SGMemoryPool& memPool) {}
 };

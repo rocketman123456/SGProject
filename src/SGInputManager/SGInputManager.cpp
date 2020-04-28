@@ -45,7 +45,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 int SG::SGInputManager::Initialize()
 {
-	m_Witdh = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
+	m_Width = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
 	m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
 	m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
 	ASSERT_TRUE(m_Window);

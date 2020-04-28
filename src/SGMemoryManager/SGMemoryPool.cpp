@@ -35,26 +35,25 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 //========================================================================
-
 #include "SGMemoryPool.h"
 #include "AssertFault.h"
+#include "SGLog.h"
 #include <stdlib.h>
 #include <string>
 
-
 const static size_t CHUNK_HEADER_SIZE = (sizeof(unsigned char*));
 
-MemoryPool::MemoryPool(void)
+SGMemoryPool::SGMemoryPool(void)
 {
 	Reset();
 }
 
-MemoryPool::~MemoryPool(void)
+SGMemoryPool::~SGMemoryPool(void)
 {
 	Destroy();
 }
 
-bool MemoryPool::Init(unsigned int chunkSize, unsigned int numChunks)
+bool SGMemoryPool::Init(unsigned int chunkSize, unsigned int numChunks)
 {
 	// it's safe to call Init() without calling Destroy()
 	if (m_ppRawMemoryArray)
@@ -70,17 +69,17 @@ bool MemoryPool::Init(unsigned int chunkSize, unsigned int numChunks)
 	return false;
 }
 
-void MemoryPool::Destroy(void)
+void SGMemoryPool::Destroy(void)
 {
 	// dump the state of the memory pool
 #ifdef _DEBUG
 	std::string str;
-	//if (m_numAllocs != 0)
-	//	str = "***(" + ToStr(m_numAllocs) + ") ";
+	if (m_numAllocs != 0)
+		str = "***(" + std::to_string(m_numAllocs) + ") ";
 	unsigned long totalNumChunks = m_numChunks * m_memArraySize;
 	unsigned long wastedMem = (totalNumChunks - m_allocPeak) * m_chunkSize;
-	//str += "Destroying memory pool: [" + GetDebugName() + ":" + ToStr((unsigned long)m_chunkSize) + "] = " + ToStr(m_allocPeak) + "/" + ToStr((unsigned long)totalNumChunks) + " (" + ToStr(wastedMem) + " bytes wasted)\n";
-	//::OutputDebugStringA(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
+	str += "Destroying memory pool: [" + GetDebugName() + ":" + std::to_string((unsigned long)m_chunkSize) + "] = " + std::to_string(m_allocPeak) + "/" + std::to_string((unsigned long)totalNumChunks) + " (" + std::to_string(wastedMem) + " bytes wasted)\n";
+	LOG_DEBUG(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
 #endif
 
 	// free all memory
@@ -94,7 +93,7 @@ void MemoryPool::Destroy(void)
 	Reset();
 }
 
-void* MemoryPool::Alloc(void)
+void* SGMemoryPool::Alloc(void)
 {
 	// If we're out of memory chunks, grow the pool.  This is very expensive.
 	if (!m_pHead)
@@ -121,7 +120,7 @@ void* MemoryPool::Alloc(void)
 	return (pRet + CHUNK_HEADER_SIZE);  // make sure we return a pointer to the data section only
 }
 
-void MemoryPool::Free(void* pMem)
+void SGMemoryPool::Free(void* pMem)
 {
 	if (pMem != NULL)  	// calling Free() on a NULL pointer is perfectly valid
 	{
@@ -140,7 +139,7 @@ void MemoryPool::Free(void* pMem)
 	}
 }
 
-void MemoryPool::Reset(void)
+void SGMemoryPool::Reset(void)
 {
 	m_ppRawMemoryArray = NULL;
 	m_pHead = NULL;
@@ -154,11 +153,11 @@ void MemoryPool::Reset(void)
 #endif
 }
 
-bool MemoryPool::GrowMemoryArray(void)
+bool SGMemoryPool::GrowMemoryArray(void)
 {
 #ifdef _DEBUG
-	//std::string str("Growing memory pool: [" + GetDebugName() + ":" + ToStr((unsigned long)m_chunkSize) + "] = " + ToStr((unsigned long)m_memArraySize + 1) + "\n");
-	//::OutputDebugStringA(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
+	std::string str("Growing memory pool: [" + GetDebugName() + ":" + std::to_string((unsigned long)m_chunkSize) + "] = " + std::to_string((unsigned long)m_memArraySize + 1) + "\n");
+	LOG_DEBUG(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
 #endif
 
 	// allocate a new array
@@ -206,7 +205,7 @@ bool MemoryPool::GrowMemoryArray(void)
 	return true;
 }
 
-unsigned char* MemoryPool::AllocateNewMemoryBlock(void)
+unsigned char* SGMemoryPool::AllocateNewMemoryBlock(void)
 {
 	// calculate the size of each block and the size of the actual memory allocation
 	size_t blockSize = m_chunkSize + CHUNK_HEADER_SIZE;  // chunk + linked list overhead
@@ -236,13 +235,13 @@ unsigned char* MemoryPool::AllocateNewMemoryBlock(void)
 	return pNewMem;
 }
 
-unsigned char* MemoryPool::GetNext(unsigned char* pBlock)
+unsigned char* SGMemoryPool::GetNext(unsigned char* pBlock)
 {
 	unsigned char** ppChunkHeader = (unsigned char**)pBlock;
 	return ppChunkHeader[0];
 }
 
-void MemoryPool::SetNext(unsigned char* pBlockToChange, unsigned char* pNewNext)
+void SGMemoryPool::SetNext(unsigned char* pBlockToChange, unsigned char* pNewNext)
 {
 	unsigned char** ppChunkHeader = (unsigned char**)pBlockToChange;
 	ppChunkHeader[0] = pNewNext;

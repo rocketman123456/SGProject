@@ -12,7 +12,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 int SG::SGBaseApplication::Initialize(int32_t w, int32_t h)
 {
-	m_Witdh = w;
+	m_Width = w;
 	m_Height = h;
 	return Initialize();
 }
@@ -29,7 +29,7 @@ int SG::SGBaseApplication::Initialize()
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		LOG_INFO("OpenGL Version %d.%d", 4, 5)
 
-		m_Window = glfwCreateWindow(m_Witdh, m_Height, "SGProject", NULL, NULL);
+		m_Window = glfwCreateWindow(m_Width, m_Height, "SGProject", NULL, NULL);
 		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 
 		if (m_Window == NULL)

@@ -35,7 +35,7 @@ int SG::SGGraphicsManager::Initialize()
 	int result = 0;
 	do {
 		// get glfw from global app
-		m_Witdh = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
+		m_Width = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
 		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
 		m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
 		ASSERT_TRUE(m_Window);
@@ -71,64 +71,55 @@ void SG::SGGraphicsManager::Finalize()
 
 void SG::SGGraphicsManager::Tick()
 {
+	// per-frame time logic
+	// --------------------
+	currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
 	// render start
 	// ------
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// bind Texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_Texture1);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, m_Texture2);
-
-	// prepare data
-	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
+	// lighting
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = m_Camera->GetViewMatrix();
-	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
 
-	glm::vec3 lightColor = glm::vec3(1.0f);
-	lightColor.x = sin(glfwGetTime() * 2.0f);
-	lightColor.y = sin(glfwGetTime() * 0.7f);
-	lightColor.z = sin(glfwGetTime() * 1.3f);
-
-	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // 降低影响
-	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
-
-	// activate shader
+	// be sure to activate shader when setting uniforms/drawing objects
 	m_LightingShader->use();
-	m_LightingShader->setFloat("mixValue", mixValue);
-	m_LightingShader->setMat4("view", view);
-	m_LightingShader->setMat4("projection", projection);
+	m_LightingShader->setVec3("light.position", lightPos);
 	m_LightingShader->setVec3("viewPos", m_Camera->Position);
 
-	m_LightingShader->setVec3("material.ambient", ruby.ambient);
-	m_LightingShader->setVec3("material.diffuse", ruby.diffuse);
-	m_LightingShader->setVec3("material.specular", ruby.specular);
-	m_LightingShader->setFloat("material.shininess", ruby.shininess);
-
-	m_LightingShader->setVec3("light.position", lightPos);
-	m_LightingShader->setVec3("light.ambient", ambientColor);
-	m_LightingShader->setVec3("light.diffuse", diffuseColor); // 将光照调暗了一些以搭配场景
+	// light properties
+	m_LightingShader->setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+	m_LightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	m_LightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-	// TODO: load model and render
-	// draw our first triangle
+	// material properties
+	//m_LightingShader->setInt("material.diffuse", 0);
+	//m_LightingShader->setInt("material.specular", 1);
+	m_LightingShader->setFloat("material.shininess", 64.0f);
+
+	// view/projection transformations
+	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 100.0f);
+	glm::mat4 view = m_Camera->GetViewMatrix();
+	m_LightingShader->setMat4("projection", projection);
+	m_LightingShader->setMat4("view", view);
+
+	// world transformation
+	glm::mat4 model = glm::mat4(1.0f);
+	m_LightingShader->setMat4("model", model);
+
+	// bind diffuse map
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_DiffuseMap);
+	// bind specular map
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_SpecularMap);
+
+	// render the cube
 	glBindVertexArray(m_cubeVAO);
-	for (unsigned int i = 0; i < 10; i++)
-	{
-		// calculate the model matrix for each object and pass it to shader before drawing
-		float angle = 20.0f * i;
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, cubePositions[i]);
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		m_LightingShader->setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// also draw the lamp object
 	model = glm::mat4(1.0f);
@@ -203,57 +194,52 @@ void SG::SGGraphicsManager::GenerateData()
 void SG::SGGraphicsManager::GenerateTexture()
 {
 	// load picture
-	// texture 1
-	// ---------
-	int width, height, nrChannels;
-	glGenTextures(1, &m_Texture1);
-	glBindTexture(GL_TEXTURE_2D, m_Texture1);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load and generate the texture
-	//stbi_set_flip_vertically_on_load(true);
-	std::string pic1 = m_BaseAssetDir + "Textures/container.jpg";
-	unsigned char* data = stbi_load(pic1.c_str(), &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		LOG_ERROR("Failed to load texture %s", pic1.c_str());
-	}
-	stbi_image_free(data);
-	// texture 2
-	// ---------
-	glGenTextures(1, &m_Texture2);
-	glBindTexture(GL_TEXTURE_2D, m_Texture2);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
-	stbi_set_flip_vertically_on_load(true);
-	std::string pic2 = m_BaseAssetDir + "Textures/awesomeface.png";
-	data = stbi_load(pic2.c_str(), &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		LOG_ERROR("Failed to load texture %s", pic2.c_str());
-	}
-	stbi_image_free(data);
-
+	std::string picdiffuse = m_BaseAssetDir + "Textures/container2.png";
+	m_DiffuseMap = LoadTexture(picdiffuse.c_str());
+	//std::string picspecular = m_BaseAssetDir + "Textures/container2_specular.png"; 
+	std::string picspecular = m_BaseAssetDir + "Textures/lighting_maps_specular_color.png";
+	m_SpecularMap = LoadTexture(picspecular.c_str());
 	m_LightingShader->use();
-	m_LightingShader->setInt("texture1", 0);
-	m_LightingShader->setInt("texture2", 1);
+	m_LightingShader->setInt("material.diffuse", 0);
+	m_LightingShader->setInt("material.specular", 1);
+}
+
+// TODO: use uniform resource manager
+// utility function for loading a 2D texture from file
+// ---------------------------------------------------
+uint32_t SG::SGGraphicsManager::LoadTexture(char const* path)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return textureID;
 }
