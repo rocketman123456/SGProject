@@ -14,6 +14,7 @@ set (PROJECT_ASSET_DIR ${PROJECT_SOURCE_DIR})
 
 find_package(stb REQUIRED)
 find_package(pthread REQUIRED)
+find_package(Vulkan REQUIRED)
 
 #find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
@@ -37,7 +38,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE glad::glad)
 #target_link_libraries(main PRIVATE imgui::imgui)
 #target_link_libraries(main PRIVATE LinearMath Bullet3Common BulletDynamics BulletSoftBody)
-#target_link_libraries(main PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
+#target_link_libraries(main PRIVATE nlohmann_json nlohmann_json::nlohmann_json)\
+#target_link_libraries(main ${Vulkan_LIBRARIES})
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
@@ -45,6 +47,7 @@ configure_file (
 )
 
 include_directories(
+	"${Vulkan_INCLUDE_DIRS}"
 	"${PTHREAD_INCLUDE_DIR}"
 	"${PROJECT_SOURCE_DIR}/3rdParty/include"
 )

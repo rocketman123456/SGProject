@@ -5,8 +5,6 @@ target_link_libraries(SGBase
 	${PTHREAD_LIBRARIES}
 	sqlite3
 	unofficial::libuv::libuv
-	glm glfw glad::glad imgui::imgui
-	Eigen3::Eigen
 	LinearMath Bullet3Common BulletDynamics BulletSoftBody
 )
 target_link_libraries(SGBase

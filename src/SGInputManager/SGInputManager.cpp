@@ -1,19 +1,17 @@
 #include "SGInputManager.h"
 #include "SGLog.h"
 #include "SGBaseApplication.h"
-#include "SGGraphicsManager.h"
 #include "AssertFault.h"
 
 namespace SG
 {
 	extern SGIApplication* g_pApp;
-	extern SGIRuntimeModule* g_pGraphicsManager;
 }
 
 // TODO: use struct to store data
-float lastX = 0.0f;
-float lastY = 0.0f;
-bool firstMouse = true;
+static float lastX = 0.0f;
+static float lastY = 0.0f;
+static bool firstMouse = true;
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------

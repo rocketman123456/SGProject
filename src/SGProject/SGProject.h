@@ -10,5 +10,5 @@
 #include "SGIApplication.h"
 
 #include "SGBaseApplication.h"
-#include "SGGraphicsManager.h"
+#include "SGOpenGLGraphicsManager.h"
 #include "SGEventManager.h"

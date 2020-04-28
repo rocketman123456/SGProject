@@ -1,13 +1,14 @@
 #pragma once
 #include "SGLog.h"
 #include "SGIRuntimeModule.h"
+#include "SGMemoryMacros.h"
+
 #include "SGShader.h"
 #include "SGCamera.h"
 #include "SGConfig.h"
 #include "SGLight.h"
 #include "SGMaterial.h"
 #include "SGMaterialData.h"
-#include "SGMemoryMacros.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,11 +19,12 @@
 
 namespace SG
 {
-	class SGGraphicsManager : implements SGIRuntimeModule
+	class SGOpenGLGraphicsManager : implements SGIRuntimeModule
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:
-		SGGraphicsManager(const std::string& asset = SGProject_ASSET_DIR) :m_BaseAssetDir(asset) {}
+		// TODO: use uniform asset loader
+		SGOpenGLGraphicsManager(const std::string& asset = SGProject_ASSET_DIR) :m_BaseAssetDir(asset) {}
 		virtual int Initialize() override;
 		virtual void Finalize() override;
 		virtual void Tick() override;

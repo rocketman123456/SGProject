@@ -1,4 +1,4 @@
-#include "SGGraphicsManager.h"
+#include "SGOpenGLGraphicsManager.h"
 #include "SGBaseApplication.h"
 #include "SGInputManager.h"
 #include "AssertFault.h"
@@ -14,13 +14,13 @@ namespace SG
 	extern SGIRuntimeModule* g_pInputManager;
 }
 
-SG_MEMORYPOOL_DEFINITION(SG::SGGraphicsManager);
+SG_MEMORYPOOL_DEFINITION(SG::SGOpenGLGraphicsManager);
 
-int SG::SGGraphicsManager::Initialize()
+int SG::SGOpenGLGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
-		SGGraphicsManager::InitMemoryPool(128);
+		SGOpenGLGraphicsManager::InitMemoryPool(128);
 		// get glfw from global app
 		m_Width = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
 		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
@@ -41,22 +41,22 @@ int SG::SGGraphicsManager::Initialize()
 		GenerateTexture();
 	} while (false);
 
-	LOG_INFO("SGGraphicsManager Initialize");
+	LOG_INFO("SGOpenGLGraphicsManager Initialize");
 	return result;
 }
 
-void SG::SGGraphicsManager::Finalize()
+void SG::SGOpenGLGraphicsManager::Finalize()
 {
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &m_cubeVAO);
     glDeleteBuffers(1, &m_VBO);
 
-	SGGraphicsManager::DestroyMemoryPool();
-	LOG_INFO("SGGraphicsManager Finalize");
+	SGOpenGLGraphicsManager::DestroyMemoryPool();
+	LOG_INFO("SGOpenGLGraphicsManager Finalize");
 }
 
-void SG::SGGraphicsManager::Tick()
+void SG::SGOpenGLGraphicsManager::Tick()
 {
 	// per-frame time logic
 	// --------------------
@@ -183,7 +183,7 @@ void SG::SGGraphicsManager::Tick()
 	glfwPollEvents();
 }
 
-void SG::SGGraphicsManager::GenerateShader()
+void SG::SGOpenGLGraphicsManager::GenerateShader()
 {
 	// build and compile our shader program
 	// ------------------------------------
@@ -197,7 +197,7 @@ void SG::SGGraphicsManager::GenerateShader()
 	ASSERT_TRUE(m_LampShader);
 }
 
-void SG::SGGraphicsManager::GenerateData()
+void SG::SGOpenGLGraphicsManager::GenerateData()
 {
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -228,7 +228,7 @@ void SG::SGGraphicsManager::GenerateData()
 	glEnableVertexAttribArray(0);
 }
 
-void SG::SGGraphicsManager::GenerateTexture()
+void SG::SGOpenGLGraphicsManager::GenerateTexture()
 {
 	// load picture
 	std::string picdiffuse = m_BaseAssetDir + "Textures/container2.png";
@@ -244,7 +244,7 @@ void SG::SGGraphicsManager::GenerateTexture()
 // TODO: use uniform resource manager
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
-uint32_t SG::SGGraphicsManager::LoadTexture(char const* path)
+uint32_t SG::SGOpenGLGraphicsManager::LoadTexture(char const* path)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);

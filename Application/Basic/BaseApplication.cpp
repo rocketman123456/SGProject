@@ -1,14 +1,14 @@
 #include "SGBaseApplication.h"
 #include "SGEventManager.h"
 #include "SGInputManager.h"
-#include "SGGraphicsManager.h"
+#include "SGOpenGLGraphicsManager.h"
 
 namespace SG
 {
 	SGBaseApplication g_App;
 	SGEventManager g_EventManager;
 	SGInputManager g_InputManager;
-	SGGraphicsManager g_GraphicsManager;
+	SGOpenGLGraphicsManager g_GraphicsManager;
 
 	SGIApplication* g_pApp = &g_App;
 	SGIRuntimeModule* g_pEventManager = &g_EventManager;
