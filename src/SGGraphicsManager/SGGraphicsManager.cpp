@@ -78,17 +78,24 @@ void SG::SGGraphicsManager::Tick()
 
 	// be sure to activate shader when setting uniforms/drawing objects
 	m_LightingShader->use();
-	m_LightingShader->setVec3("light.position", lightPos);
+	m_LightingShader->setVec3("light.position", m_Camera->Position);
+	m_LightingShader->setVec3("light.direction", m_Camera->Front);
+	m_LightingShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+	m_LightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 	m_LightingShader->setVec3("viewPos", m_Camera->Position);
 
 	// light properties
-	m_LightingShader->setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-	m_LightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+	m_LightingShader->setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
+	m_LightingShader->setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
 	m_LightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+	m_LightingShader->setFloat("light.constant", 1.0f);
+	m_LightingShader->setFloat("light.linear", 0.09f);
+	m_LightingShader->setFloat("light.quadratic", 0.032f);
+
 	// material properties
-	//m_LightingShader->setInt("material.diffuse", 0);
-	//m_LightingShader->setInt("material.specular", 1);
+	m_LightingShader->setInt("material.diffuse", 0);
+	m_LightingShader->setInt("material.specular", 1);
 	m_LightingShader->setFloat("material.shininess", 64.0f);
 
 	// view/projection transformations
@@ -96,10 +103,6 @@ void SG::SGGraphicsManager::Tick()
 	glm::mat4 view = m_Camera->GetViewMatrix();
 	m_LightingShader->setMat4("projection", projection);
 	m_LightingShader->setMat4("view", view);
-
-	// world transformation
-	glm::mat4 model = glm::mat4(1.0f);
-	m_LightingShader->setMat4("model", model);
 
 	// bind diffuse map
 	glActiveTexture(GL_TEXTURE0);
@@ -110,24 +113,34 @@ void SG::SGGraphicsManager::Tick()
 
 	// render the cube
 	glBindVertexArray(m_cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, cubePositions[i]);
+		float angle = 20.0f * i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		m_LightingShader->setMat4("model", model);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	// also draw the lamp object
-	model = glm::mat4(1.0f);
+	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, lightPos);
 	model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 	m_LampShader->use();
 	m_LampShader->setMat4("projection", projection);
 	m_LampShader->setMat4("view", view);
 	m_LampShader->setMat4("model", model);
-	m_LampShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 	glBindVertexArray(m_lightVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
 	// draw outline of the lamp
 	m_LampShader->setVec3("lightColor", 0.0f, 0.0f, 0.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	m_LampShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// TODO: add Debug UI here -- imgui
 
