@@ -82,13 +82,21 @@ void SG::SGGraphicsManager::Tick()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_Texture2);
 
-	// change picture mixture
+	// prepare data
 	mixValue = (sin(glfwGetTime()) + 1.0) / 2.0;
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = m_Camera->GetViewMatrix();
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Witdh / (float)m_Height, 0.1f, 100.0f);
+
+	glm::vec3 lightColor = glm::vec3(1.0f);
+	lightColor.x = sin(glfwGetTime() * 2.0f);
+	lightColor.y = sin(glfwGetTime() * 0.7f);
+	lightColor.z = sin(glfwGetTime() * 1.3f);
+
+	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // 降低影响
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
 
 	// activate shader
 	m_LightingShader->use();
@@ -97,18 +105,10 @@ void SG::SGGraphicsManager::Tick()
 	m_LightingShader->setMat4("projection", projection);
 	m_LightingShader->setVec3("viewPos", m_Camera->Position);
 
-	m_LightingShader->setVec3("material.ambient", silver.ambient);
-	m_LightingShader->setVec3("material.diffuse", silver.diffuse);
-	m_LightingShader->setVec3("material.specular", silver.specular);
-	m_LightingShader->setFloat("material.shininess", silver.shininess);
-
-	glm::vec3 lightColor = glm::vec3(1.0f);
-	//lightColor.x = sin(glfwGetTime() * 2.0f);
-	//lightColor.y = sin(glfwGetTime() * 0.7f);
-	//lightColor.z = sin(glfwGetTime() * 1.3f);
-
-	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // 降低影响
-	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
+	m_LightingShader->setVec3("material.ambient", ruby.ambient);
+	m_LightingShader->setVec3("material.diffuse", ruby.diffuse);
+	m_LightingShader->setVec3("material.specular", ruby.specular);
+	m_LightingShader->setFloat("material.shininess", ruby.shininess);
 
 	m_LightingShader->setVec3("light.position", lightPos);
 	m_LightingShader->setVec3("light.ambient", ambientColor);
@@ -123,10 +123,9 @@ void SG::SGGraphicsManager::Tick()
 		// calculate the model matrix for each object and pass it to shader before drawing
 		float angle = 20.0f * i;
 		model = glm::mat4(1.0f);
-		model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[i]);
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		m_LightingShader->setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}

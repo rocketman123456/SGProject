@@ -1,4 +1,4 @@
-#version 450 core
+#version 330 core
 out vec4 FragColor;
 
 in vec3 Normal;  
@@ -20,9 +20,9 @@ struct Light {
 };
 
 // light color attrbuties
-uniform Material material;
-uniform Light light;
 uniform vec3 viewPos;
+uniform Light light;
+uniform Material material;
 // texture attrbuties
 uniform float mixValue;
 uniform sampler2D texture1;
@@ -46,7 +46,6 @@ void main()
     vec3 specular = light.specular * (spec * material.specular);
     
     vec3 result = ambient + diffuse + specular;
-	// linearly interpolate between both textures (80% container, 20% awesomeface)
 	//FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), mixValue);
 	//FragColor = FragColor * vec4(result, 1.0);
     FragColor = vec4(result, 1.0);
