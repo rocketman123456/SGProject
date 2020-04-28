@@ -8,9 +8,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-// texture mix value
-float mixValue = 0.2f;
-
 namespace SG
 {
 	extern SGIApplication* g_pApp;
@@ -18,7 +15,6 @@ namespace SG
 }
 
 SG_MEMORYPOOL_DEFINITION(SG::SGGraphicsManager);
-//SG_MEMORYPOOL_AUTOINIT(SG::SGGraphicsManager, 128);
 
 int SG::SGGraphicsManager::Initialize()
 {
@@ -78,25 +74,57 @@ void SG::SGGraphicsManager::Tick()
 
 	// be sure to activate shader when setting uniforms/drawing objects
 	m_LightingShader->use();
-	m_LightingShader->setVec3("light.position", m_Camera->Position);
-	m_LightingShader->setVec3("light.direction", m_Camera->Front);
-	m_LightingShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-	m_LightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 	m_LightingShader->setVec3("viewPos", m_Camera->Position);
+	m_LightingShader->setFloat("material.shininess", 32.0f);
 
-	// light properties
-	m_LightingShader->setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
-	m_LightingShader->setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
-	m_LightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-	m_LightingShader->setFloat("light.constant", 1.0f);
-	m_LightingShader->setFloat("light.linear", 0.09f);
-	m_LightingShader->setFloat("light.quadratic", 0.032f);
-
-	// material properties
-	m_LightingShader->setInt("material.diffuse", 0);
-	m_LightingShader->setInt("material.specular", 1);
-	m_LightingShader->setFloat("material.shininess", 64.0f);
+	// directional light
+	m_LightingShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+	m_LightingShader->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+	m_LightingShader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+	m_LightingShader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+	// point light 1
+	m_LightingShader->setVec3("pointLights[0].position", pointLightPositions[0]);
+	m_LightingShader->setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+	m_LightingShader->setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+	m_LightingShader->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setFloat("pointLights[0].constant", 1.0f);
+	m_LightingShader->setFloat("pointLights[0].linear", 0.09);
+	m_LightingShader->setFloat("pointLights[0].quadratic", 0.032);
+	// point light 2
+	m_LightingShader->setVec3("pointLights[1].position", pointLightPositions[1]);
+	m_LightingShader->setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+	m_LightingShader->setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+	m_LightingShader->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setFloat("pointLights[1].constant", 1.0f);
+	m_LightingShader->setFloat("pointLights[1].linear", 0.09);
+	m_LightingShader->setFloat("pointLights[1].quadratic", 0.032);
+	// point light 3
+	m_LightingShader->setVec3("pointLights[2].position", pointLightPositions[2]);
+	m_LightingShader->setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+	m_LightingShader->setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+	m_LightingShader->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setFloat("pointLights[2].constant", 1.0f);
+	m_LightingShader->setFloat("pointLights[2].linear", 0.09);
+	m_LightingShader->setFloat("pointLights[2].quadratic", 0.032);
+	// point light 4
+	m_LightingShader->setVec3("pointLights[3].position", pointLightPositions[3]);
+	m_LightingShader->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+	m_LightingShader->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+	m_LightingShader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setFloat("pointLights[3].constant", 1.0f);
+	m_LightingShader->setFloat("pointLights[3].linear", 0.09);
+	m_LightingShader->setFloat("pointLights[3].quadratic", 0.032);
+	// spotLight
+	m_LightingShader->setVec3("spotLight.position", m_Camera->Position);
+	m_LightingShader->setVec3("spotLight.direction", m_Camera->Front);
+	m_LightingShader->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+	m_LightingShader->setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+	m_LightingShader->setFloat("spotLight.constant", 1.0f);
+	m_LightingShader->setFloat("spotLight.linear", 0.09);
+	m_LightingShader->setFloat("spotLight.quadratic", 0.032);
+	m_LightingShader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+	m_LightingShader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
 	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 100.0f);
@@ -125,22 +153,27 @@ void SG::SGGraphicsManager::Tick()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
-	// also draw the lamp object
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, lightPos);
-	model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+	// also draw the lamp object(s)
 	m_LampShader->use();
 	m_LampShader->setMat4("projection", projection);
 	m_LampShader->setMat4("view", view);
-	m_LampShader->setMat4("model", model);
+
+	// we now draw as many light bulbs as we have point lights.
 	glBindVertexArray(m_lightVAO);
-	// draw outline of the lamp
-	m_LampShader->setVec3("lightColor", 0.0f, 0.0f, 0.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	m_LampShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, pointLightPositions[i]);
+		model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+		m_LampShader->setMat4("model", model);
+
+		m_LampShader->setVec3("lightColor", 0.0f, 0.0f, 0.0f);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		m_LampShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	// TODO: add Debug UI here -- imgui
 
@@ -200,8 +233,8 @@ void SG::SGGraphicsManager::GenerateTexture()
 	// load picture
 	std::string picdiffuse = m_BaseAssetDir + "Textures/container2.png";
 	m_DiffuseMap = LoadTexture(picdiffuse.c_str());
-	//std::string picspecular = m_BaseAssetDir + "Textures/container2_specular.png"; 
-	std::string picspecular = m_BaseAssetDir + "Textures/lighting_maps_specular_color.png";
+	std::string picspecular = m_BaseAssetDir + "Textures/container2_specular.png"; 
+	//std::string picspecular = m_BaseAssetDir + "Textures/lighting_maps_specular_color.png";
 	m_SpecularMap = LoadTexture(picspecular.c_str());
 	m_LightingShader->use();
 	m_LightingShader->setInt("material.diffuse", 0);
