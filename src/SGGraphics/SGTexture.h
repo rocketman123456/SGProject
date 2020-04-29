@@ -2,7 +2,7 @@
 #include <string>
 
 struct SGTexture {
-    unsigned int id;
+    uint32_t id;
     std::string type;
     std::string path;
 };

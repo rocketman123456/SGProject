@@ -20,7 +20,7 @@ public:
     }
 
     // render the mesh
-    void Draw(SGShader shader);
+    void Draw(SGShader& shader);
 protected:
     // initializes all the buffer objects/arrays
     void SetupMesh();
@@ -34,5 +34,5 @@ public:
 
 private:
     // Render data
-    unsigned int VBO, EBO;  
+    uint32_t VBO, EBO;  
 };

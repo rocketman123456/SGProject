@@ -9,4 +9,5 @@ add_library(SGGraphics
 target_link_libraries(SGGraphics 
 	glm Eigen3::Eigen 
 	glfw glad::glad imgui::imgui
+	assimp::assimp
 )

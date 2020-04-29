@@ -9,6 +9,7 @@
 #include "SGMaterial.h"
 #include "SGMaterialData.h"
 #include "SGShader.h"
+#include "SGModel.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -36,12 +37,6 @@ namespace SG
 		int32_t GetWindowHeight() const { return m_Height; }
 
 	protected:
-		void GenerateShader();
-		void GenerateData();
-		void GenerateTexture();
-		uint32_t LoadTexture(char const* path);
-
-	protected:
 		GLFWwindow* m_Window;
 		int32_t m_Width;
 		int32_t m_Height;
@@ -49,12 +44,14 @@ namespace SG
 		SGCamera* m_Camera;
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
+		SGShader* m_ModelShader;
+		SGModel* m_Model;
 
 		std::string m_BaseAssetDir;
-		uint32_t m_VBO;
-		uint32_t m_cubeVAO, m_lightVAO;
-		uint32_t m_Texture1, m_Texture2;
-		uint32_t m_DiffuseMap, m_SpecularMap;
+		//uint32_t m_VBO;
+		//uint32_t m_cubeVAO, m_lightVAO;
+		//uint32_t m_Texture1, m_Texture2;
+		//uint32_t m_DiffuseMap, m_SpecularMap;
 
 		float currentFrame = 0.0, lastFrame = 0.0, deltaTime = 0.0;
 	};

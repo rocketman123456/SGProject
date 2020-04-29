@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-void SGMesh::Draw(SGShader shader)
+void SGMesh::Draw(SGShader& shader)
 {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
