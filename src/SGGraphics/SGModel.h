@@ -29,7 +29,7 @@ protected:
     void processNode(aiNode* node, const aiScene* scene);
     SGMesh processMesh(aiMesh* mesh, const aiScene* scene);
     std::vector<SGTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-protected:
+public:
     // 模型数据
     std::vector<SGMesh> meshes;
     std::vector<SGTexture> textures_loaded;

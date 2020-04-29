@@ -18,6 +18,8 @@ namespace SG
 	SG_MEMORYPOOL_AUTOINIT(SGOpenGLGraphicsManager, 128);
 }
 
+static uint32_t amount = 2*100*100;
+
 int SG::SGOpenGLGraphicsManager::Initialize()
 {
 	int result = 0;
@@ -68,10 +70,88 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		std::string gs5 = m_BaseAssetDir + "Shaders/NormalShaderGS.glsl";
 		m_NormalShader = new SGShader(vs5.c_str(), fs5.c_str(), gs5.c_str());
 		ASSERT_TRUE(m_NormalShader);
+		std::string vs6 = m_BaseAssetDir + "Shaders/AsteroidsShaderVS.glsl";
+		std::string fs6 = m_BaseAssetDir + "Shaders/AsteroidsShaderFS.glsl";
+		m_AsteroidShader = new SGShader(vs6.c_str(), fs6.c_str());
+		ASSERT_TRUE(m_AsteroidShader);
+		std::string vs7 = m_BaseAssetDir + "Shaders/PlanetShaderVS.glsl";
+		std::string fs7 = m_BaseAssetDir + "Shaders/PlanetShaderFS.glsl";
+		m_PlanetShader = new SGShader(vs7.c_str(), fs7.c_str());
+		ASSERT_TRUE(m_PlanetShader);
 
 		std::string m1 = m_BaseAssetDir + "Models/nanosuit.obj";
-		m_Model = new SGModel(m1.c_str());
-		ASSERT_TRUE(m_Model);
+		m_NanoSuitModel = new SGModel(m1.c_str());
+		ASSERT_TRUE(m_NanoSuitModel);
+		std::string m2 = m_BaseAssetDir + "Models/rock.obj";
+		m_RockModel = new SGModel(m2.c_str());
+		ASSERT_TRUE(m_RockModel);
+		std::string m3 = m_BaseAssetDir + "Models/planet.obj";
+		m_PlanetModel = new SGModel(m3.c_str());
+		ASSERT_TRUE(m_PlanetModel);
+
+		// generate a large list of semi-random model transformation matrices
+		// ------------------------------------------------------------------
+		m_ModelMatrices = new glm::mat4[amount];
+		srand(glfwGetTime()); // initialize random seed	
+		float radius = 150.0;
+		float offset = 25.0f;
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			// 1. translation: displace along circle with 'radius' in range [-offset, offset]
+			float angle = (float)i / (float)amount * 360.0f;
+			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float x = sin(angle) * radius + displacement;
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float y = displacement * 0.4f; // keep height of asteroid field smaller compared to width of x and z
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float z = cos(angle) * radius + displacement;
+			model = glm::translate(model, glm::vec3(x, y, z));
+
+			// 2. scale: Scale between 0.05 and 0.25f
+			float scale = (rand() % 20) / 100.0f + 0.05;
+			model = glm::scale(model, glm::vec3(scale));
+
+			// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
+			float rotAngle = (rand() % 360);
+			model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+			// 4. now add to list of matrices
+			m_ModelMatrices[i] = model;
+		}
+
+		// configure instanced array
+		// -------------------------
+		unsigned int buffer;
+		glGenBuffers(1, &buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, buffer);
+		glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &m_ModelMatrices[0], GL_STATIC_DRAW);
+
+		// set transformation matrices as an instance vertex attribute (with divisor 1)
+		// note: we're cheating a little by taking the, now publicly declared, VAO of the model's mesh(es) and adding new vertexAttribPointers
+		// normally you'd want to do this in a more organized fashion, but for learning purposes this will do.
+		// -----------------------------------------------------------------------------------------------------------------------------------
+		for (unsigned int i = 0; i < m_RockModel->meshes.size(); i++)
+		{
+			unsigned int VAO = m_RockModel->meshes[i].VAO;
+			glBindVertexArray(VAO);
+			// set attribute pointers for matrix (4 times vec4)
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+			glEnableVertexAttribArray(4);
+			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+			glEnableVertexAttribArray(5);
+			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+			glEnableVertexAttribArray(6);
+			glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+			glVertexAttribDivisor(3, 1);
+			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
+			glVertexAttribDivisor(6, 1);
+
+			glBindVertexArray(0);
+		}
 
 		// skybox VAO
 		glGenVertexArrays(1, &m_SkyboxVAO);
@@ -124,7 +204,7 @@ void SG::SGOpenGLGraphicsManager::Tick()
 
 	m_ModelShader->use();
 	// view/projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 2000.0f);
 	glm::mat4 view = m_Camera->GetViewMatrix();
 	m_ModelShader->setMat4("projection", projection);
 	m_ModelShader->setMat4("view", view);
@@ -135,19 +215,45 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 	m_ModelShader->setMat4("model", model);
 	m_ModelShader->setVec3("cameraPos", m_Camera->Position);
-	m_ModelShader->setFloat("time", glfwGetTime());
+	//m_ModelShader->setFloat("time", glfwGetTime());
+	m_ModelShader->setFloat("time", 0.0f);
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
 	// draw model
-	m_Model->Draw(*m_ModelShader);
+	m_NanoSuitModel->Draw(*m_ModelShader);
 
 	// then draw model with normal visualizing geometry shader
 	m_NormalShader->use();
 	m_NormalShader->setMat4("projection", projection);
 	m_NormalShader->setMat4("view", view);
 	m_NormalShader->setMat4("model", model);
+	// draw model
+	m_NanoSuitModel->Draw(*m_NormalShader);
 
-	m_Model->Draw(*m_NormalShader);
+	// draw planet
+	glm::mat4 model_planet = glm::mat4(1.0f);
+	model_planet = glm::translate(model_planet, glm::vec3(0.0f, -18.0f, 0.0f));
+	model_planet = glm::scale(model_planet, glm::vec3(4.0f, 4.0f, 4.0f));
+	m_PlanetShader->use();
+	m_PlanetShader->setMat4("model", model_planet);
+	m_PlanetShader->use();
+	m_PlanetShader->setMat4("projection", projection);
+	m_PlanetShader->setMat4("view", view);
+	m_PlanetModel->Draw(*m_PlanetShader);
+
+	// draw meteorites
+	m_AsteroidShader->use();
+	m_AsteroidShader->setInt("texture_diffuse1", 0);
+	m_AsteroidShader->setMat4("projection", projection);
+	m_AsteroidShader->setMat4("view", view);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_RockModel->textures_loaded[0].id); // note: we also made the textures_loaded vector public (instead of private) from the model class.
+	for (unsigned int i = 0; i < m_RockModel->meshes.size(); i++)
+	{
+		glBindVertexArray(m_RockModel->meshes[i].VAO);
+		glDrawElementsInstanced(GL_TRIANGLES, m_RockModel->meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
+		glBindVertexArray(0);
+	}
 
 	// draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content

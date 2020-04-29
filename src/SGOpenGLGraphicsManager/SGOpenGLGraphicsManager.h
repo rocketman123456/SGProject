@@ -42,12 +42,19 @@ namespace SG
 		int32_t m_Height;
 
 		SGCamera* m_Camera;
-		SGModel* m_Model;
+		SGModel* m_NanoSuitModel;
+		
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
 		SGShader* m_ModelShader;
 		SGShader* m_SkyboxShader;
 		SGShader* m_NormalShader;
+
+		SGModel* m_RockModel;
+		SGModel* m_PlanetModel;
+		SGShader* m_AsteroidShader;
+		SGShader* m_PlanetShader;
+		glm::mat4* m_ModelMatrices;
 
 		std::string m_BaseAssetDir;
 		//uint32_t m_VBO;
