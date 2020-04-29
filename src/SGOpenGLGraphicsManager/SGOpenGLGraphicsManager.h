@@ -45,10 +45,13 @@ namespace SG
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
 		SGShader* m_ModelShader;
+		SGShader* m_SkyboxShader;
 		SGModel* m_Model;
 
 		std::string m_BaseAssetDir;
 		//uint32_t m_VBO;
+		uint32_t m_SkyboxVAO, m_SkyboxVBO;
+		uint32_t m_CubemapTexture;
 		//uint32_t m_cubeVAO, m_lightVAO;
 		//uint32_t m_Texture1, m_Texture2;
 		//uint32_t m_DiffuseMap, m_SpecularMap;

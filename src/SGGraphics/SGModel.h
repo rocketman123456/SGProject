@@ -36,5 +36,3 @@ protected:
     std::string directory;
     bool gammaCorrection;
 };
-
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
