@@ -63,6 +63,11 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		std::string fs4 = m_BaseAssetDir + "Shaders/SkyboxShaderFS.glsl";
 		m_SkyboxShader = new SGShader(vs4.c_str(), fs4.c_str());
 		ASSERT_TRUE(m_SkyboxShader);
+		std::string vs5 = m_BaseAssetDir + "Shaders/NormalShaderVS.glsl";
+		std::string fs5 = m_BaseAssetDir + "Shaders/NormalShaderFS.glsl";
+		std::string gs5 = m_BaseAssetDir + "Shaders/NormalShaderGS.glsl";
+		m_NormalShader = new SGShader(vs5.c_str(), fs5.c_str(), gs5.c_str());
+		ASSERT_TRUE(m_NormalShader);
 
 		std::string m1 = m_BaseAssetDir + "Models/nanosuit.obj";
 		m_Model = new SGModel(m1.c_str());
@@ -135,6 +140,14 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
 	// draw model
 	m_Model->Draw(*m_ModelShader);
+
+	// then draw model with normal visualizing geometry shader
+	m_NormalShader->use();
+	m_NormalShader->setMat4("projection", projection);
+	m_NormalShader->setMat4("view", view);
+	m_NormalShader->setMat4("model", model);
+
+	m_Model->Draw(*m_NormalShader);
 
 	// draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content

@@ -42,11 +42,12 @@ namespace SG
 		int32_t m_Height;
 
 		SGCamera* m_Camera;
+		SGModel* m_Model;
 		SGShader* m_LightingShader;
 		SGShader* m_LampShader;
 		SGShader* m_ModelShader;
 		SGShader* m_SkyboxShader;
-		SGModel* m_Model;
+		SGShader* m_NormalShader;
 
 		std::string m_BaseAssetDir;
 		//uint32_t m_VBO;
