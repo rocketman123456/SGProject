@@ -24,7 +24,7 @@ void SGModel::loadModel(const std::string& path)
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+        LOG_ERROR("ERROR::ASSIMP:: %s", importer.GetErrorString());
         return;
     }
     // retrieve the directory path of the filepath
@@ -160,6 +160,7 @@ vector<SGTexture> SGModel::loadMaterialTextures(aiMaterial* mat, aiTextureType t
             texture.path = str.C_Str();
             textures.push_back(texture);
             textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+            //LOG_INFO("Load Texture %s, Type %s", str.C_Str(), typeName.c_str());
         }
     }
     return textures;

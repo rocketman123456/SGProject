@@ -25,7 +25,8 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(R - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * diff * texture(texture_height1, TexCoords);
+    //vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * diff * texture(texture_height1, TexCoords);
+    vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * texture(texture_height1, TexCoords);
 
     // specular
     vec3 viewDir = normalize(cameraPos - FragPos);
