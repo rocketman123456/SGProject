@@ -30,8 +30,11 @@ void main()
     // specular
     vec3 viewDir = normalize(cameraPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0);
+    //float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
     vec4 specular = vec4(texture(skybox, R).rgb, 1.0) * spec * texture(texture_specular1, TexCoords);
+    
 
     //FragColor = texture(texture_diffuse1, TexCoords);
     //FragColor = vec4(texture(skybox, R).rgb, 1.0);

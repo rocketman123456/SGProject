@@ -45,6 +45,8 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		glCullFace(GL_BACK);
 		// 用多重采样来解决锯齿问题
 		glEnable(GL_MULTISAMPLE);
+		// Gamma Correct
+		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		// build and compile our shader program
 		// ------------------------------------
@@ -223,12 +225,12 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	m_NanoSuitModel->Draw(*m_ModelShader);
 
 	// then draw model with normal visualizing geometry shader
-	m_NormalShader->use();
-	m_NormalShader->setMat4("projection", projection);
-	m_NormalShader->setMat4("view", view);
-	m_NormalShader->setMat4("model", model);
+	//m_NormalShader->use();
+	//m_NormalShader->setMat4("projection", projection);
+	//m_NormalShader->setMat4("view", view);
+	//m_NormalShader->setMat4("model", model);
 	// draw model
-	m_NanoSuitModel->Draw(*m_NormalShader);
+	//m_NanoSuitModel->Draw(*m_NormalShader);
 
 	// draw planet
 	glm::mat4 model_planet = glm::mat4(1.0f);
