@@ -1,21 +1,40 @@
 cmake_minimum_required (VERSION 3.8)
 
-add_executable (SGBase BaseApplication.cpp)
-target_link_libraries(SGBase
+add_executable (SGOpenGL "OpenGLApplication.cpp")
+target_link_libraries(SGOpenGL
 	${PTHREAD_LIBRARIES}
-	sqlite3
-	unofficial::libuv::libuv
+	sqlite3 unofficial::libuv::libuv
 	LinearMath Bullet3Common BulletDynamics BulletSoftBody
 )
-target_link_libraries(SGBase
+target_link_libraries(SGOpenGL
 	SGProject
 	SGLog
 	SGTime
-	SGBaseApplication
-	SGGraphicsManager
+	SGOpenGLApplication
+	SGOpenGLGraphicsManager
 	SGInputManager
 	SGEventManager
 	SGMemoryManager
 	SGMultiThread
 	Utils
 )
+#[[
+add_executable (SGVulkan VulkanApplication.cpp)
+target_link_libraries(SGVulkan
+	${PTHREAD_LIBRARIES}
+	sqlite3 unofficial::libuv::libuv
+	LinearMath Bullet3Common BulletDynamics BulletSoftBody
+)
+target_link_libraries(SGVulkan
+	SGProject
+	SGLog
+	SGTime
+	SGVulkanApplication
+	SGVulkanGraphicsManager
+	SGInputManager
+	SGEventManager
+	SGMemoryManager
+	SGMultiThread
+	Utils
+)
+]]

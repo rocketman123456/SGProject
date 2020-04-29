@@ -1,5 +1,5 @@
 #include "SGOpenGLGraphicsManager.h"
-#include "SGBaseApplication.h"
+#include "SGOpenGLApplication.h"
 #include "SGInputManager.h"
 #include "AssertFault.h"
 #include "SGCubeData.h"
@@ -12,19 +12,19 @@ namespace SG
 {
 	extern SGIApplication* g_pApp;
 	extern SGIRuntimeModule* g_pInputManager;
-}
 
-SG_MEMORYPOOL_DEFINITION(SG::SGOpenGLGraphicsManager);
+	SG_MEMORYPOOL_DEFINITION(SGOpenGLGraphicsManager);
+	SG_MEMORYPOOL_AUTOINIT(SGOpenGLGraphicsManager, 128);
+}
 
 int SG::SGOpenGLGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
-		SGOpenGLGraphicsManager::InitMemoryPool(128);
 		// get glfw from global app
-		m_Width = static_cast<SGBaseApplication*>(g_pApp)->GetWindowWidth();
-		m_Height = static_cast<SGBaseApplication*>(g_pApp)->GetWindowHeight();
-		m_Window = static_cast<SGBaseApplication*>(g_pApp)->GetGLFWWindow();
+		m_Width = static_cast<SGOpenGLApplication*>(g_pApp)->GetWindowWidth();
+		m_Height = static_cast<SGOpenGLApplication*>(g_pApp)->GetWindowHeight();
+		m_Window = static_cast<SGOpenGLApplication*>(g_pApp)->GetGLFWWindow();
 		ASSERT_TRUE(m_Window);
 
 		m_Camera = static_cast<SGInputManager*>(g_pInputManager)->GetCamera();
@@ -32,9 +32,15 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 
 		// configure global opengl state
 		// -----------------------------
+		glClearDepth(1.0f);
 		glEnable(GL_DEPTH_TEST);
 		// 用多重采样来解决锯齿问题
 		glEnable(GL_MULTISAMPLE);
+		// Set the polygon winding to front facing for the right handed system.
+		//glFrontFace(GL_CCW);
+		// Enable back face culling.
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
 
 		GenerateShader();
 		GenerateData();
@@ -52,7 +58,6 @@ void SG::SGOpenGLGraphicsManager::Finalize()
     glDeleteVertexArrays(1, &m_cubeVAO);
     glDeleteBuffers(1, &m_VBO);
 
-	SGOpenGLGraphicsManager::DestroyMemoryPool();
 	LOG_INFO("SGOpenGLGraphicsManager Finalize");
 }
 
@@ -68,9 +73,6 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	// ------
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// lighting
-	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 	// be sure to activate shader when setting uniforms/drawing objects
 	m_LightingShader->use();
@@ -253,7 +255,7 @@ uint32_t SG::SGOpenGLGraphicsManager::LoadTexture(char const* path)
 	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
 	if (data)
 	{
-		GLenum format;
+		GLenum format = 0;
 		if (nrComponents == 1)
 			format = GL_RED;
 		else if (nrComponents == 3)

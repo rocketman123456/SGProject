@@ -1,4 +1,4 @@
-#include "SGBaseApplication.h"
+#include "SGOpenGLApplication.h"
 #include "SGLog.h"
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -10,21 +10,23 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-SG_MEMORYPOOL_DEFINITION(SG::SGBaseApplication);
+namespace SG
+{
+	SG_MEMORYPOOL_DEFINITION(SGOpenGLApplication);
+	SG_MEMORYPOOL_AUTOINIT(SGOpenGLApplication, 128);
+}
 
-int SG::SGBaseApplication::Initialize(int32_t w, int32_t h)
+int SG::SGOpenGLApplication::Initialize(int32_t w, int32_t h)
 {
 	m_Width = w;
 	m_Height = h;
 	return Initialize();
 }
 
-int SG::SGBaseApplication::Initialize()
+int SG::SGOpenGLApplication::Initialize()
 {
 	int result = 0;
 	do {
-		SGBaseApplication::InitMemoryPool(64);
-
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -53,26 +55,25 @@ int SG::SGBaseApplication::Initialize()
 		}
 	} while (false);
 
-	LOG_INFO("SGBaseApplication Initialize");
+	LOG_INFO("SGOpenGLApplication Initialize");
 	return result;
 }
 
-void SG::SGBaseApplication::Finalize()
+void SG::SGOpenGLApplication::Finalize()
 {
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
 
-	SGBaseApplication::DestroyMemoryPool();
-	LOG_INFO("SGBaseApplication Finalize");
+	LOG_INFO("SGOpenGLApplication Finalize");
 }
 
-void SG::SGBaseApplication::Tick()
+void SG::SGOpenGLApplication::Tick()
 {
 	m_bQuit = glfwWindowShouldClose(m_Window);
 }
 
-bool SG::SGBaseApplication::IsQuit()
+bool SG::SGOpenGLApplication::IsQuit()
 {
 	return m_bQuit;
 }

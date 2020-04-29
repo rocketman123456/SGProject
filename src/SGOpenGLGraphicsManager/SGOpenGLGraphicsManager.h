@@ -1,18 +1,17 @@
 #pragma once
 #include "SGLog.h"
-#include "SGIRuntimeModule.h"
 #include "SGMemoryMacros.h"
+#include "SGIRuntimeModule.h"
 
-#include "SGShader.h"
-#include "SGCamera.h"
 #include "SGConfig.h"
+#include "SGCamera.h"
 #include "SGLight.h"
 #include "SGMaterial.h"
 #include "SGMaterialData.h"
+#include "SGShader.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-//#include <sigslot/signal.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

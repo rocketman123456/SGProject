@@ -27,6 +27,11 @@ find_package(glad CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
+
+#find_package(glslang CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE glslang::HLSL glslang::SPIRV glslang::glslang glslang::OGLCompiler)
 
 #target_link_libraries(main PRIVATE fmt::fmt fmt::fmt-header-only)
 #target_link_libraries(main PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
@@ -40,6 +45,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE LinearMath Bullet3Common BulletDynamics BulletSoftBody)
 #target_link_libraries(main PRIVATE nlohmann_json nlohmann_json::nlohmann_json)\
 #target_link_libraries(main ${Vulkan_LIBRARIES})
+#target_link_libraries(main PRIVATE assimp::assimp)
+#target_link_libraries(main PRIVATE ZLIB::ZLIB)
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"
@@ -59,7 +66,9 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
 	"${PROJECT_SOURCE_DIR}/src/SGFileManager"
-	"${PROJECT_SOURCE_DIR}/src/SGGraphicsManager"
+	"${PROJECT_SOURCE_DIR}/src/SGGraphics"
+	"${PROJECT_SOURCE_DIR}/src/SGOpenGLGraphicsManager"
+	"${PROJECT_SOURCE_DIR}/src/SGVulkanGraphicsManager"
 	"${PROJECT_SOURCE_DIR}/src/SGInputManager"
 	"${PROJECT_SOURCE_DIR}/src/SGInterface"
 	"${PROJECT_SOURCE_DIR}/src/SGLog"

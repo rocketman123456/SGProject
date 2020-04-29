@@ -1,7 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
-struct Light {
+struct SGLight 
+{
     glm::vec3 position;
     glm::vec3 ambient;
     glm::vec3 diffuse;

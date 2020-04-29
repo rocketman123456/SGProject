@@ -1,10 +1,18 @@
 #include "SGVulkanGraphicsManager.h"
-SG_MEMORYPOOL_DEFINITION(SG::SGVulkanGraphicsManager);
+#include "SGVulkanApplication.h"
+#include "AssertFault.h"
+
+namespace SG
+{
+	extern SGIApplication* g_pApp;
+
+	SG_MEMORYPOOL_DEFINITION(SGVulkanGraphicsManager);
+	SG_MEMORYPOOL_AUTOINIT(SGVulkanGraphicsManager, 128);
+}
 
 int SG::SGVulkanGraphicsManager::Initialize()
 {
 	int result = 0;
-	SGVulkanGraphicsManager::InitMemoryPool(128);
 	do {
 
 	} while (false);
@@ -14,7 +22,6 @@ int SG::SGVulkanGraphicsManager::Initialize()
 
 void SG::SGVulkanGraphicsManager::Finalize()
 {
-	SGVulkanGraphicsManager::DestroyMemoryPool();
 	LOG_INFO("SGVulkanGraphicsManager Initialize");
 }
 

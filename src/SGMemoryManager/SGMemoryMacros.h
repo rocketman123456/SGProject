@@ -95,10 +95,10 @@
 	SGMemoryPool* _className_::s_pMemoryPool = NULL;\
 	void _className_::InitMemoryPool(unsigned int numChunks, const char* debugName) \
 	{ \
-        LOG_INFO("Memory Pool for %s is Initialized", #_className_);\
+        printf("Memory Pool for %s is Initialized.", #_className_);\
 		if (s_pMemoryPool != NULL) \
 		{ \
-			LOG_ERROR("s_pMemoryPool is not NULL.  All data will be destroyed.  (Ignorable)"); \
+			printf("s_pMemoryPool is not NULL.  All data will be destroyed.  (Ignorable)"); \
 			SAFE_DELETE(s_pMemoryPool); \
 		} \
 		s_pMemoryPool = SG_NEW SGMemoryPool; \
@@ -112,7 +112,7 @@
 	{ \
 		ASSERT_TRUE(s_pMemoryPool != NULL); \
 		SAFE_DELETE(s_pMemoryPool); \
-        LOG_INFO("Memory Pool for %s is Destroyed", #_className_);\
+        printf("Memory Pool for %s is Destroyed.", #_className_);\
 	} \
     void* _className_::operator new(size_t size) \
     { \

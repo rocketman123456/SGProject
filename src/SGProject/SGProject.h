@@ -4,11 +4,6 @@
 #include "SGDefine.h"
 #include "SGModules.h"
 
-#include "SGSingleton.h"
 #include "SGLog.h"
 #include "SGIRuntimeModule.h"
 #include "SGIApplication.h"
-
-#include "SGBaseApplication.h"
-#include "SGOpenGLGraphicsManager.h"
-#include "SGEventManager.h"

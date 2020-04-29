@@ -2,12 +2,12 @@
 #include "SGIApplication.h"
 #include "SGMemoryMacros.h"
 
-#include <glad/glad.h>
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 namespace SG
 {
-	class SGBaseApplication : implements SGIApplication 
+	class SGVulkanApplication : implements SGIApplication
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:

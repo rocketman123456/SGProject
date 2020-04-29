@@ -79,7 +79,7 @@ void SGMemoryPool::Destroy(void)
 	unsigned long totalNumChunks = m_numChunks * m_memArraySize;
 	unsigned long wastedMem = (totalNumChunks - m_allocPeak) * m_chunkSize;
 	str += "Destroying memory pool: [" + GetDebugName() + ":" + std::to_string((unsigned long)m_chunkSize) + "] = " + std::to_string(m_allocPeak) + "/" + std::to_string((unsigned long)totalNumChunks) + " (" + std::to_string(wastedMem) + " bytes wasted)\n";
-	LOG_DEBUG(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
+	printf(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
 #endif
 
 	// free all memory
@@ -157,7 +157,7 @@ bool SGMemoryPool::GrowMemoryArray(void)
 {
 #ifdef _DEBUG
 	std::string str("Growing memory pool: [" + GetDebugName() + ":" + std::to_string((unsigned long)m_chunkSize) + "] = " + std::to_string((unsigned long)m_memArraySize + 1) + "\n");
-	LOG_DEBUG(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
+	printf(str.c_str());  // the logger is not initialized during many of the initial memory pool growths, so let's just use the OS version
 #endif
 
 	// allocate a new array
