@@ -36,10 +36,6 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		glClearDepth(1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
-		// stencil test
-		//glEnable(GL_STENCIL_TEST);
-		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		// Set the polygon winding to front facing for the right handed system.
 		glFrontFace(GL_CCW);
 		// Enable back face culling.
@@ -60,7 +56,8 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		ASSERT_TRUE(m_LampShader);
 		std::string vs3 = m_BaseAssetDir + "Shaders/ModelShaderVS.glsl";
 		std::string fs3 = m_BaseAssetDir + "Shaders/ModelShaderFS.glsl";
-		m_ModelShader = new SGShader(vs3.c_str(), fs3.c_str());
+		std::string gs3 = m_BaseAssetDir + "Shaders/ModelShaderGS.glsl";
+		m_ModelShader = new SGShader(vs3.c_str(), fs3.c_str(), gs3.c_str());
 		ASSERT_TRUE(m_ModelShader);
 		std::string vs4 = m_BaseAssetDir + "Shaders/SkyboxShaderVS.glsl";
 		std::string fs4 = m_BaseAssetDir + "Shaders/SkyboxShaderFS.glsl";
@@ -121,7 +118,6 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ModelShader->use();
-
 	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 100.0f);
 	glm::mat4 view = m_Camera->GetViewMatrix();
@@ -134,8 +130,10 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 	m_ModelShader->setMat4("model", model);
 	m_ModelShader->setVec3("cameraPos", m_Camera->Position);
+	m_ModelShader->setFloat("time", glfwGetTime());
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
+	// draw model
 	m_Model->Draw(*m_ModelShader);
 
 	// draw skybox as last

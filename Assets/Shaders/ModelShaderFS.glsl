@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 out vec4 FragColor;
 
 in vec3 FragPos;  
@@ -25,13 +25,12 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(R - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    //vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * diff * texture(texture_height1, TexCoords);
-    vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * texture(texture_height1, TexCoords);
+    vec4 diffuse = vec4(texture(skybox, R).rgb, 1.0) * texture(texture_height1, TexCoords) * diff;
 
     // specular
     vec3 viewDir = normalize(cameraPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
     vec4 specular = vec4(texture(skybox, R).rgb, 1.0) * spec * texture(texture_specular1, TexCoords);
 
     //FragColor = texture(texture_diffuse1, TexCoords);
