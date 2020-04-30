@@ -1,5 +1,48 @@
 #include "SGCamera.h"
 
+void SGCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+{
+    float velocity = MovementSpeed * deltaTime;
+    if (direction == FORWARD)
+        Position += Front * velocity;
+    if (direction == BACKWARD)
+        Position -= Front * velocity;
+    if (direction == LEFT)
+        Position -= Right * velocity;
+    if (direction == RIGHT)
+        Position += Right * velocity;
+}
+
+void SGCamera::ProcessMouseMovement(float xoffset, float yoffset, uint8_t constrainPitch)
+{
+    xoffset *= MouseSensitivity;
+    yoffset *= MouseSensitivity;
+
+    Yaw += xoffset;
+    Pitch += yoffset;
+
+    // Make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (constrainPitch) {
+        if (Pitch > 89.0f)
+            Pitch = 89.0f;
+        if (Pitch < -89.0f)
+            Pitch = -89.0f;
+    }
+
+    // Update Front, Right and Up Vectors using the updated Euler angles
+    UpdateCameraVectors();
+}
+
+void SGCamera::ProcessMouseScroll(float yoffset)
+{
+    if (Zoom >= 1.0f && Zoom <= 45.0f)
+        Zoom -= yoffset;
+    if (Zoom <= 1.0f)
+        Zoom = 1.0f;
+    if (Zoom >= 45.0f)
+        Zoom = 45.0f;
+}
+
 void SGCamera::UpdateCameraVectors()
 {
     // Calculate the new Front vector

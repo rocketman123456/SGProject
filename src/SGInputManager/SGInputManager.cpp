@@ -12,6 +12,7 @@ namespace SG
 static float lastX = 0.0f;
 static float lastY = 0.0f;
 static bool firstMouse = true;
+static bool mouseControl = true;
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
@@ -105,24 +106,28 @@ void SG::SGInputManager::Tick()
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(m_Window, true);
 
-	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
-		m_Camera->ProcessKeyboard(FORWARD, m_deltaTime);
-	}
-	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
-		m_Camera->ProcessKeyboard(BACKWARD, m_deltaTime);
-	}
-	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS) {
-		m_Camera->ProcessKeyboard(LEFT, m_deltaTime);
-	}
-	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
-		m_Camera->ProcessKeyboard(RIGHT, m_deltaTime);
+	if (mouseControl) {
+		if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
+			m_Camera->ProcessKeyboard(FORWARD, m_deltaTime);
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
+			m_Camera->ProcessKeyboard(BACKWARD, m_deltaTime);
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS) {
+			m_Camera->ProcessKeyboard(LEFT, m_deltaTime);
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
+			m_Camera->ProcessKeyboard(RIGHT, m_deltaTime);
+		}
 	}
 
 	if (CheckOnPress(GLFW_KEY_F)) {
 		if (m_isMouseEnable) {
+			mouseControl = false;
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 		else {
+			mouseControl = true;;
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 		m_isMouseEnable = !m_isMouseEnable;

@@ -37,6 +37,10 @@ namespace SG
 		int32_t GetWindowHeight() const { return m_Height; }
 
 	protected:
+		void GenerateData();
+		void GenerateShader();
+
+	protected:
 		GLFWwindow* m_Window;
 		int32_t m_Width;
 		int32_t m_Height;
@@ -57,9 +61,9 @@ namespace SG
 		glm::mat4* m_ModelMatrices;
 
 		std::string m_BaseAssetDir;
-		//uint32_t m_VBO;
 		uint32_t m_SkyboxVAO, m_SkyboxVBO;
 		uint32_t m_CubemapTexture;
+		//uint32_t m_VBO;
 		//uint32_t m_cubeVAO, m_lightVAO;
 		//uint32_t m_Texture1, m_Texture2;
 		//uint32_t m_DiffuseMap, m_SpecularMap;
