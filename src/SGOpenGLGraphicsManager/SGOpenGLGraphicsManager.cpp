@@ -98,19 +98,19 @@ void SG::SGOpenGLGraphicsManager::Tick()
 
 	// render the loaded model
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+	//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+	//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 	
-	m_ModelShader->use();
-	m_ModelShader->setMat4("projection", projection);
-	m_ModelShader->setMat4("view", view);
-	m_ModelShader->setMat4("model", model);
-	m_ModelShader->setVec3("cameraPos", m_Camera->Position);
-	m_ModelShader->setFloat("time", glfwGetTime());
+	//m_ModelShader->use();
+	//m_ModelShader->setMat4("projection", projection);
+	//m_ModelShader->setMat4("view", view);
+	//m_ModelShader->setMat4("model", model);
+	//m_ModelShader->setVec3("cameraPos", m_Camera->Position);
+	//m_ModelShader->setFloat("time", glfwGetTime());
 	//m_ModelShader->setFloat("time", 0.0f);
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
-	m_NanoSuitModel->Draw(*m_ModelShader);
+	//glActiveTexture(GL_TEXTURE4);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
+	//m_NanoSuitModel->Draw(*m_ModelShader);
 
 	// then draw model with normal visualizing geometry shader
 	//m_NormalShader->use();

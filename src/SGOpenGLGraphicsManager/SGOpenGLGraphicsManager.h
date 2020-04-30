@@ -44,6 +44,8 @@ namespace SG
 		GLFWwindow* m_Window;
 		int32_t m_Width;
 		int32_t m_Height;
+		int32_t m_ShadowWidth;
+		int32_t m_ShadowHeight;
 
 		SGCamera* m_Camera;
 		SGModel* m_NanoSuitModel;

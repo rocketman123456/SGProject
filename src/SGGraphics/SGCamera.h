@@ -24,7 +24,6 @@ class SGCamera
 public:
     // Camera Attributes
     glm::vec3 Position;
-    glm::vec3 LookAtPos;
     glm::vec3 Front;
     glm::vec3 Up;
     glm::vec3 Right;
@@ -58,8 +57,7 @@ public:
 
     glm::mat4 AutoLookAt(glm::vec3 pos)
     {
-        LookAtPos = glm::normalize(pos - Position);
-        Front = LookAtPos;
+        Front = glm::normalize(pos - Position);
         Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up = glm::normalize(glm::cross(Right, Front));
         return glm::lookAt(Position, Position + Front, Up);
