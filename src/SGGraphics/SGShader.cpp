@@ -1,4 +1,5 @@
 #include "SGShader.h"
+using namespace SG;
 
 SGShader::SGShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {

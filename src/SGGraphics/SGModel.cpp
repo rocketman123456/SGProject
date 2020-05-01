@@ -2,6 +2,7 @@
 #include "SGLog.h"
 #include "SGTextureLoader.h"
 using namespace std;
+using namespace SG;
 
 SGModel::SGModel(const char* path)
 {

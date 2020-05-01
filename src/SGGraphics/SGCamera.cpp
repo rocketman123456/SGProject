@@ -1,4 +1,5 @@
 #include "SGCamera.h"
+using namespace SG;
 
 void SGCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {

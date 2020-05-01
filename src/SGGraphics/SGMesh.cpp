@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 using namespace std;
+using namespace SG;
 
 void SGMesh::Draw(SGShader& shader)
 {

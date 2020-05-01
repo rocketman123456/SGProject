@@ -18,21 +18,24 @@
 #include <map>
 #include <vector>
 
-class SGModel
+namespace SG
 {
-public:
-    SGModel(const char* path);
-    void Draw(SGShader& shader);
-protected:
-    // 函数
-    void loadModel(const std::string& path);
-    void processNode(aiNode* node, const aiScene* scene);
-    SGMesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<SGTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-public:
-    // 模型数据
-    std::vector<SGMesh> meshes;
-    std::vector<SGTexture> textures_loaded;
-    std::string directory;
-    bool gammaCorrection;
-};
+    class SGModel
+    {
+    public:
+        SGModel(const char* path);
+        void Draw(SGShader& shader);
+    protected:
+        // 函数
+        void loadModel(const std::string& path);
+        void processNode(aiNode* node, const aiScene* scene);
+        SGMesh processMesh(aiMesh* mesh, const aiScene* scene);
+        std::vector<SGTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+    public:
+        // 模型数据
+        std::vector<SGMesh> meshes;
+        std::vector<SGTexture> textures_loaded;
+        std::string directory;
+        bool gammaCorrection;
+    };
+}
