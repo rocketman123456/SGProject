@@ -6,28 +6,32 @@
 
 namespace SG
 {
+	using SystemClock = std::chrono::system_clock;
+	using MicroSeconds = std::chrono::microseconds;
 	// 用于快速获取时间，包括不同精度等级
 	class SGTime
 	{
 	public:
-		explicit SGTime(float start = 0.0f) :m_TimeCurrent(start), m_TimeScale(1.0f), m_isPause(false) {};
-		~SGTime() {};
+		void Initialize();
+		void Update();
+		void SingleStep();
+		void GenerateDateString(); // may get down the performance
 		void DisplayTime(); // this function is for debug
 
-		void Update(double dt);
-		void SingleStep();
-	public:
-		void GenerateDateString(); // may get down the performance
 		inline const std::string& GetDateString() { return m_DateString; }
+		inline double GetCurrentTime() { return m_CurrentTime; }
+		inline double GetElapse() { return m_Elapse; }
 		inline void SetPaused(bool pause) { m_isPause = pause; }
 		inline bool IsPaused() { return m_isPause; }
-		inline void SetTimeScale(float scale) { m_TimeScale = scale; }
-		inline float GetTimeScale() { return m_TimeScale; }
-		inline double GetTime() { return m_TimeCurrent; }
+		inline void SetTimeScale(double scale) { m_TimeScale = scale; }
+		inline double GetTimeScale() { return m_TimeScale; }
 	protected:
-		double m_TimeCurrent;
-		float m_TimeScale;
-		bool m_isPause;
 		std::string m_DateString; // can be use for save data
+		SystemClock::time_point m_TimeCurrent;
+		SystemClock::time_point m_TimePrevious;
+		double m_Elapse = 0.0;
+		double m_CurrentTime = 0.0;
+		double m_TimeScale = 1.0;
+		bool m_isPause = false;
 	};
 }

@@ -10,7 +10,7 @@ add_executable (sg_time_test "sgtime_test.cpp")
 target_link_libraries(sg_time_test SGTime)
 
 add_executable (event_test "event_test.cpp")
-target_link_libraries (event_test SGEventManager Utils SGLog)
+target_link_libraries (event_test SGMultiThread Utils SGLog)
 
 add_executable (glm_test "glm_test.cpp")
 target_link_libraries(glm_test Eigen3::Eigen)

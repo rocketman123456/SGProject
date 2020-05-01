@@ -4,4 +4,5 @@ add_library(SGMultiThread
 	SGMultiThread.cpp
 	SGWorkerThread.cpp
 	"SGProcess.cpp"
+	"SGProcessManager.cpp"
 )

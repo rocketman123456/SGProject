@@ -3,23 +3,44 @@
 #include <iomanip> // put_time
 #include <ctime>   // localtime
 #include <sstream> // stringstream
-
 using namespace std;
 
-void SG::SGTime::Update(double dtReal)
+void SG::SGTime::Initialize()
+{
+	m_TimeCurrent = SystemClock::now();
+	m_TimePrevious = m_TimeCurrent;
+}
+
+void SG::SGTime::Update()
 {
 	if (!m_isPause)
 	{
-		m_TimeCurrent += dtReal * m_TimeScale;
+		m_TimeCurrent = SystemClock::now();
+		MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
+		m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
+		m_TimePrevious = m_TimeCurrent;
 	}
+	else
+	{
+		m_TimeCurrent = SystemClock::now();
+		m_Elapse = 0.0;
+	}
+	m_CurrentTime += m_Elapse;
 }
 
 void SG::SGTime::SingleStep()
 {
+	m_TimeCurrent = SystemClock::now();
+	m_TimePrevious = m_TimeCurrent;
 	if (!m_isPause)
-	{
-		m_TimeCurrent += (1.0f / 30.0f) * m_TimeScale;
+	{	
+		m_Elapse = (1.0f / 30.0f) * m_TimeScale;
 	}
+	else
+	{
+		m_Elapse = 0.0;
+	}
+	m_CurrentTime += m_Elapse;
 }
 
 void SG::SGTime::DisplayTime()

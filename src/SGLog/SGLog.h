@@ -1,5 +1,5 @@
 #pragma once
-#include "SGSingleton.h"
+#include "SGISingleton.h"
 
 namespace SG
 {
@@ -14,7 +14,7 @@ namespace SG
 		Graphic,
 	};
 
-	class SGLog : implements SGSingleton<SGLog>
+	class SGLog : implements SGISingleton<SGLog>
 	{
 	public:
 		int Initialize();

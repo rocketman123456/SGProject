@@ -46,8 +46,8 @@ namespace SG
         void PostMsg(const UserData* data);
 
     protected:
-        SGWorkerThread(const SGWorkerThread&);
-        SGWorkerThread& operator=(const SGWorkerThread&);
+        SGWorkerThread(const SGWorkerThread&) = delete;
+        SGWorkerThread& operator=(const SGWorkerThread&) = delete;
 
         /// Entry point for the worker thread
         void Process();

@@ -1,15 +1,14 @@
 #pragma once
 #include "SGDefine.h"
-#include "SGIRuntimeModule.h"
 
 namespace SG
 {
     template <typename T>
-    Interface SGSingleton
+    Interface SGISingleton
     {
     public:
-        explicit SGSingleton() {}
-        ~SGSingleton() {}
+        explicit SGISingleton() {}
+        ~SGISingleton() {}
 
         static T& GetSingleton()
         {
@@ -18,7 +17,7 @@ namespace SG
         }
 
     private:
-        SGSingleton(const SGSingleton&) = delete;
-        const SGSingleton& operator= (const SGSingleton&) = delete;
+        SGISingleton(const SGISingleton&) = delete;
+        const SGISingleton& operator= (const SGISingleton&) = delete;
     };
 }
