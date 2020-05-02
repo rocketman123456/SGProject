@@ -63,6 +63,7 @@ void SG::SGOpenGLApplication::Finalize()
 {
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
+	glfwDestroyWindow(m_Window);
 	glfwTerminate();
 
 	LOG_INFO("SGOpenGLApplication Finalize");

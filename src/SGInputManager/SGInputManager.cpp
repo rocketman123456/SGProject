@@ -1,11 +1,11 @@
 #include "SGInputManager.h"
-#include "SGOpenGLApplication.h"
+#include "SGApplication.h"
 #include "AssertFault.h"
 #include "SGLog.h"
 
 namespace SG
 {
-	extern SGIApplication<SGOpenGLApplication>* g_pGLApp;
+	extern SGIApplication<SGApplication>* g_pApp;
 }
 
 // TODO: use struct to store data
@@ -44,9 +44,9 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 int SG::SGInputManager::Initialize()
 {
-	m_Width = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetWindowWidth();
-	m_Height = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetWindowHeight();
-	m_Window = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetGLFWWindow();
+	m_Width = static_cast<SGApplication*>(g_pApp)->GetWindowWidth();
+	m_Height = static_cast<SGApplication*>(g_pApp)->GetWindowHeight();
+	m_Window = static_cast<SGApplication*>(g_pApp)->GetGLFWWindow();
 	ASSERT_TRUE(m_Window);
 	m_Camera = new SGCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 

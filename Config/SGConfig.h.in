@@ -3,3 +3,6 @@
 
 #define SGProject_SOURCE_DIR "${PROJECT_SOURCE_DIR}"
 #define	SGProject_ASSET_DIR	"${PROJECT_ASSET_DIR}/Assets/"
+
+#define SGOpenGL @SGOpenGL@
+#define SGVulkan @SGVulkan@

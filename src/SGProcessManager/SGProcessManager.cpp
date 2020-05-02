@@ -1,19 +1,19 @@
 #include "SGProcessManager.h"
 using namespace SG;
 
-int SG::ProcessManager::Initialize()
+int SG::SGProcessManager::Initialize()
 {
     m_timer = SGTimeManager::GetSingleton().GetTime();
     m_timer->Initialize(Resolution::High);
     return 0;
 }
 
-void SG::ProcessManager::Finalize()
+void SG::SGProcessManager::Finalize()
 {
     ClearAllProcesses();
 }
 
-void SG::ProcessManager::Tick()
+void SG::SGProcessManager::Tick()
 {
     m_timer->Update();
     double dt = m_timer->GetElapse();
@@ -24,7 +24,7 @@ void SG::ProcessManager::Tick()
 // The process update tick.  Called every logic tick.  This function returns the number of process chains that 
 // succeeded in the upper 32 bits and the number of process chains that failed or were aborted in the lower 32 bits.
 //---------------------------------------------------------------------------------------------------------------------
-uint32_t ProcessManager::UpdateProcesses(uint64_t deltaMs)
+uint32_t SGProcessManager::UpdateProcesses(uint64_t deltaMs)
 {
     uint32_t successCount = 0;
     uint32_t failCount = 0;
@@ -90,7 +90,7 @@ uint32_t ProcessManager::UpdateProcesses(uint64_t deltaMs)
 //---------------------------------------------------------------------------------------------------------------------
 // Attaches the process to the process list so it can be run on the next update.
 //---------------------------------------------------------------------------------------------------------------------
-WeakProcessPtr ProcessManager::AttachProcess(StrongProcessPtr pProcess)
+WeakProcessPtr SGProcessManager::AttachProcess(StrongProcessPtr pProcess)
 {
     m_processList.push_front(pProcess);
     return WeakProcessPtr(pProcess);
@@ -99,7 +99,7 @@ WeakProcessPtr ProcessManager::AttachProcess(StrongProcessPtr pProcess)
 //---------------------------------------------------------------------------------------------------------------------
 // Clears all processes (and DOESN'T run any exit code)
 //---------------------------------------------------------------------------------------------------------------------
-void ProcessManager::ClearAllProcesses(void)
+void SGProcessManager::ClearAllProcesses(void)
 {
     m_processList.clear();
 }
@@ -108,7 +108,7 @@ void ProcessManager::ClearAllProcesses(void)
 // Aborts all processes.  If immediate == true, it immediately calls each ones OnAbort() function and destroys all 
 // the processes.
 //---------------------------------------------------------------------------------------------------------------------
-void ProcessManager::AbortAllProcesses(bool immediate)
+void SGProcessManager::AbortAllProcesses(bool immediate)
 {
     ProcessList::iterator it = m_processList.begin();
     while (it != m_processList.end())

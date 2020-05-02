@@ -9,7 +9,7 @@ int SGMain()
 		if ((ret = g_pLog->Initialize()) != 0) { break; }
 		LOG_INFO("Hello SGProject.");
 
-		if ((ret = g_pGLApp->Initialize()) != 0) {
+		if ((ret = g_pApp->Initialize()) != 0) {
 			LOG_ERROR("Application Initialize Failed."); break;
 		}
 		if ((ret = g_pTimeManager->Initialize()) != 0) {
@@ -21,24 +21,24 @@ int SGMain()
 		if ((ret = g_pInputManager->Initialize()) != 0) {
 			LOG_ERROR("InputManager Initialize Failed."); break;
 		}
-		if ((ret = g_pGLGraphicsManager->Initialize()) != 0) {
+		if ((ret = g_pGraphicsManager->Initialize()) != 0) {
 			LOG_ERROR("GraphicsManager Initialize Failed."); break;
 		}
 
-		while (!g_pGLApp->IsQuit())
+		while (!g_pApp->IsQuit())
 		{
-			g_pGLApp->Tick();
+			g_pApp->Tick();
 			g_pTimeManager->Tick();
 			g_pEventManager->Tick();
 			g_pInputManager->Tick();
-			g_pGLGraphicsManager->Tick();
+			g_pGraphicsManager->Tick();
 		}
 
-		g_pGLGraphicsManager->Finalize();
+		g_pGraphicsManager->Finalize();
 		g_pInputManager->Finalize();
 		g_pEventManager->Finalize();
 		g_pTimeManager->Finalize();
-		g_pGLApp->Finalize();
+		g_pApp->Finalize();
 	} while (false);
 
 	return ret;

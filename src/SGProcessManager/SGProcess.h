@@ -13,7 +13,7 @@ namespace SG
 
 	Interface SGProcess
 	{
-		friend class ProcessManager;
+		friend class SGProcessManager;
 		enum ProcessState
 		{
 			// start

@@ -22,10 +22,17 @@ namespace SG
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 		int32_t GetWindowWidth() const { return m_Width; }
 		int32_t GetWindowHeight() const { return m_Height; }
+	protected:
+		int InitWindow();
+		int InitVulkan();
+
+		int CreateInstance();
 
 	protected:
 		GLFWwindow* m_Window = 0;
 		int32_t m_Width = 1600;
 		int32_t m_Height = 900;
+	protected:
+		VkInstance instance;
 	};
 }

@@ -5,6 +5,8 @@
 
 namespace SG
 {
+	extern SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGLGraphicsManager;
+	extern SGIRuntimeModule<SGVulkanGraphicsManager>* g_pVKGraphicsManager;
 	enum RenderMethod
 	{
 		OpenGL = 0,

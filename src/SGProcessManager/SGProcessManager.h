@@ -5,7 +5,7 @@
 
 namespace SG
 {
-	class ProcessManager : implements SGIRuntimeModule<ProcessManager>
+	class SGProcessManager : implements SGIRuntimeModule<SGProcessManager>
 	{
 		typedef std::list<StrongProcessPtr> ProcessList;
 	protected:
