@@ -4,7 +4,7 @@
 
 namespace SG
 {
-	extern SGIApplication<SGVulkanApplication>* g_pApp;
+	extern SGIApplication<SGVulkanApplication>* g_pGLApp;
 
 	SG_MEMORYPOOL_DEFINITION(SGVulkanGraphicsManager);
 	SG_MEMORYPOOL_AUTOINIT(SGVulkanGraphicsManager, 128);

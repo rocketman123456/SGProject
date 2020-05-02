@@ -1,6 +1,6 @@
 #include "SGIRuntimeModule.h"
+#include "SGTimeManager.h"
 #include "SGProcess.h"
-#include "SGTime.h"
 #include <list>
 
 namespace SG
@@ -10,7 +10,7 @@ namespace SG
 		typedef std::list<StrongProcessPtr> ProcessList;
 	protected:
 		ProcessList m_processList;
-		SGTime m_timer;
+		StrongTimePtr m_timer;
 
 	public:
 		virtual int Initialize();

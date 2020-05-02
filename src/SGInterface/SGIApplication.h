@@ -7,6 +7,7 @@ namespace SG
 	Interface SGIApplication : implements SGIRuntimeModule<T> 
 	{
 	public:
+		virtual ~SGIApplication() {};
 		virtual int Initialize() = 0;
 		virtual void Finalize() = 0;
 

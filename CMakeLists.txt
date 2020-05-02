@@ -71,6 +71,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
 	"${PROJECT_SOURCE_DIR}/src/SGFileManager"
 	"${PROJECT_SOURCE_DIR}/src/SGGraphics"
+	"${PROJECT_SOURCE_DIR}/src/SGGraphicsManager"
 	"${PROJECT_SOURCE_DIR}/src/SGOpenGLGraphicsManager"
 	"${PROJECT_SOURCE_DIR}/src/SGVulkanGraphicsManager"
 	"${PROJECT_SOURCE_DIR}/src/SGInputManager"

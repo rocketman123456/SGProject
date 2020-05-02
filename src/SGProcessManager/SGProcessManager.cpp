@@ -3,7 +3,8 @@ using namespace SG;
 
 int SG::ProcessManager::Initialize()
 {
-    m_timer.Initialize(Resolution::High);
+    m_timer = SGTimeManager::GetSingleton().GetTime();
+    m_timer->Initialize(Resolution::High);
     return 0;
 }
 
@@ -14,8 +15,8 @@ void SG::ProcessManager::Finalize()
 
 void SG::ProcessManager::Tick()
 {
-    m_timer.Update();
-    double dt = m_timer.GetElapse();
+    m_timer->Update();
+    double dt = m_timer->GetElapse();
     UpdateProcesses(dt);
 }
 

@@ -11,6 +11,7 @@
 #include "SGShader.h"
 #include "SGModel.h"
 
+#define GLFW_INCLUDE_VULKAN
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -73,5 +74,5 @@ namespace SG
 		float currentFrame = 0.0, lastFrame = 0.0, deltaTime = 0.0;
 	};
 
-	extern SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGraphicsManager;
+	extern SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGLGraphicsManager;
 }

@@ -11,7 +11,7 @@
 
 namespace SG
 {
-	extern SGIApplication<SGOpenGLApplication>* g_pApp;
+	extern SGIApplication<SGOpenGLApplication>* g_pGLApp;
 	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;
 
 	SG_MEMORYPOOL_DEFINITION(SGOpenGLGraphicsManager);
@@ -25,9 +25,9 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 	int result = 0;
 	do {
 		// get glfw from global app
-		m_Width = static_cast<SGOpenGLApplication*>(g_pApp)->GetWindowWidth();
-		m_Height = static_cast<SGOpenGLApplication*>(g_pApp)->GetWindowHeight();
-		m_Window = static_cast<SGOpenGLApplication*>(g_pApp)->GetGLFWWindow();
+		m_Width = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetWindowWidth();
+		m_Height = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetWindowHeight();
+		m_Window = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetGLFWWindow();
 		ASSERT_TRUE(m_Window);
 
 		m_Camera = static_cast<SGInputManager*>(g_pInputManager)->GetCamera();
