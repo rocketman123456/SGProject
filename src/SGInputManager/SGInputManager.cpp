@@ -5,7 +5,7 @@
 
 namespace SG
 {
-	extern SGIApplication* g_pApp;
+	extern SGIApplication<SGOpenGLApplication>* g_pApp;
 }
 
 // TODO: use struct to store data

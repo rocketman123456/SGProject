@@ -1,5 +1,4 @@
 ﻿// SGProject.cpp: 定义应用程序的入口点。
-//
 #include "SGProject.h"
 using namespace SG;
 
@@ -7,7 +6,7 @@ int SGMain()
 {
 	int ret;
 	do {
-		if ((ret = SGLog::GetSingleton().Initialize()) != 0)
+		if ((ret = g_pLog->Initialize()) != 0)
 		{
 			break;
 		}

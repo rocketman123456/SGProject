@@ -12,7 +12,7 @@
 
 namespace SG
 {
-	class SGInputManager : implements SGIRuntimeModule
+	class SGInputManager : implements SGIRuntimeModule<SGInputManager>
 	{
 	public:
 		virtual int Initialize() override;
@@ -43,5 +43,5 @@ namespace SG
 		float m_deltaTime = 0.0f, m_lastFrame = 0.0f, m_currentFrame = 0.0f;
 	};
 
-	extern SGIRuntimeModule* g_pInputManager;
+	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;
 }

@@ -2,16 +2,13 @@
 #include "SGOpenGLGraphicsManager.h"
 #include "SGEventManager.h"
 #include "SGInputManager.h"
+#include "SGLog.h"
 
 namespace SG
 {
-	SGOpenGLApplication g_App;
-	SGEventManager g_EventManager;
-	SGInputManager g_InputManager;
-	SGOpenGLGraphicsManager g_GraphicsManager;
-
-	SGIApplication* g_pApp = &g_App;
-	SGIRuntimeModule* g_pEventManager = &g_EventManager;
-	SGIRuntimeModule* g_pGraphicsManager = &g_GraphicsManager;
-	SGIRuntimeModule* g_pInputManager = &g_InputManager;
+	SGLog* g_pLog = &SGLog::GetSingleton();
+	SGIApplication<SGOpenGLApplication>* g_pApp = &SGOpenGLApplication::GetSingleton();
+	SGIRuntimeModule<SGEventManager>* g_pEventManager = &SGEventManager::GetSingleton();
+	SGIRuntimeModule<SGInputManager>* g_pInputManager = &SGInputManager::GetSingleton();
+	SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGraphicsManager = &SGOpenGLGraphicsManager::GetSingleton();
 }

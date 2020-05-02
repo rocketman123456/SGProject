@@ -6,13 +6,22 @@
 
 namespace SG
 {
+	enum Resolution
+	{
+		Low = 0,
+		Normal,
+		High,
+	};
+
 	using SystemClock = std::chrono::system_clock;
+	using ManoSeconds = std::chrono::nanoseconds;
 	using MicroSeconds = std::chrono::microseconds;
+	using Seconds = std::chrono::seconds;
 	// 用于快速获取时间，包括不同精度等级
 	class SGTime
 	{
 	public:
-		void Initialize();
+		void Initialize(Resolution res);
 		void Update();
 		void SingleStep();
 		void GenerateDateString(); // may get down the performance
@@ -26,6 +35,7 @@ namespace SG
 		inline void SetTimeScale(double scale) { m_TimeScale = scale; }
 		inline double GetTimeScale() { return m_TimeScale; }
 	protected:
+		Resolution m_Resolution;
 		std::string m_DateString; // can be use for save data
 		SystemClock::time_point m_TimeCurrent;
 		SystemClock::time_point m_TimePrevious;

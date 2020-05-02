@@ -3,6 +3,7 @@
 #include "SGDefine.h"
 #include "AssertFault.h"
 #include <memory>
+#include <string>
 
 namespace SG
 {
@@ -29,6 +30,8 @@ namespace SG
 	private:
 		ProcessState m_state;  // the current state of the process
 		StrongProcessPtr m_pChild;  // the child process, if any
+	protected:
+		std::string m_ProcessName = "BaseProcess";
 
 	public:
 		// construction
@@ -37,13 +40,18 @@ namespace SG
 
 	protected:
 		// interface; these functions should be overridden by the subclass as needed
-		virtual void OnInit(void) { m_state = Running; }  // called during the first update; responsible for setting the initial state (typically RUNNING)
+		virtual void OnInit(void) { // called during the first update; responsible for setting the initial state (typically RUNNING)
+			m_state = Running; 
+			LOG_INFO("Process %s Init.", m_ProcessName.c_str());
+		}
 		virtual void OnUpdate(unsigned long deltaMs) = 0;  // called every frame
 		virtual void OnSuccess(void) { }  // called if the process succeeds (see below)
 		virtual void OnFail(void) { }  // called if the process fails (see below)
 		virtual void OnAbort(void) { }  // called if the process is aborted (see below)
 
 	public:
+		inline const std::string& GetProcessName() { return m_ProcessName; }
+
 		// Functions for ending the process.
 		inline void Succeed(void);
 		inline void Fail(void);
@@ -78,12 +86,14 @@ namespace SG
 	{
 		ASSERT_TRUE(m_state == Running || m_state == Paused);
 		m_state = Successed;
+		LOG_INFO("Process %s Successed.", m_ProcessName.c_str());
 	}
 
 	inline void SGProcess::Fail(void)
 	{
 		ASSERT_TRUE(m_state == Running || m_state == Paused);
 		m_state = Failed;
+		LOG_INFO("Process %s Failed.", m_ProcessName.c_str());
 	}
 
 	inline void SGProcess::AttachChild(StrongProcessPtr pChild)
@@ -100,6 +110,7 @@ namespace SG
 	{
 		if (m_state == Running) {
 			m_state = Paused;
+			LOG_INFO("Process %s Paused.", m_ProcessName.c_str());
 		}
 		else {
 			LOG_DEBUG("Attempting to pause a process that isn't running");
@@ -110,6 +121,7 @@ namespace SG
 	{
 		if (m_state == Paused) {
 			m_state = Running;
+			LOG_INFO("Process %s UnPause.", m_ProcessName.c_str());
 		}
 		else {
 			LOG_DEBUG("Attempting to unpause a process that isn't paused");

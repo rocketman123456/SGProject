@@ -8,7 +8,7 @@
 
 namespace SG
 {
-	class SGVulkanGraphicsManager : implements SGIRuntimeModule
+	class SGVulkanGraphicsManager : implements SGIRuntimeModule<SGVulkanGraphicsManager>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:

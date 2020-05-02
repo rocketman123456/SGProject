@@ -4,9 +4,11 @@
 #include <ctime>   // localtime
 #include <sstream> // stringstream
 using namespace std;
+using namespace SG;
 
-void SG::SGTime::Initialize()
+void SG::SGTime::Initialize(Resolution res)
 {
+	m_Resolution = res;
 	m_TimeCurrent = SystemClock::now();
 	m_TimePrevious = m_TimeCurrent;
 }
@@ -16,8 +18,23 @@ void SG::SGTime::Update()
 	if (!m_isPause)
 	{
 		m_TimeCurrent = SystemClock::now();
-		MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
-		m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
+		switch (m_Resolution)
+		{
+		case Resolution::Low: {
+			Seconds duration = std::chrono::duration_cast<Seconds>(m_TimeCurrent - m_TimePrevious);
+			m_Elapse = double(duration.count()) * Seconds::period::num / Seconds::period::den * m_TimeScale;
+		} break;
+		case Resolution::Normal: {
+			MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
+			m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
+		} break;
+		case Resolution::High: {
+			ManoSeconds duration = std::chrono::duration_cast<ManoSeconds>(m_TimeCurrent - m_TimePrevious);
+			m_Elapse = double(duration.count()) * ManoSeconds::period::num / ManoSeconds::period::den * m_TimeScale;
+		} break;
+		default:
+			break;
+		}
 		m_TimePrevious = m_TimeCurrent;
 	}
 	else

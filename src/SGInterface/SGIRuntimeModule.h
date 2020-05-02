@@ -1,9 +1,12 @@
 #pragma once
 #include "SGDefine.h"
+#include "SGISingleton.h"
 
 namespace SG
 {
-	Interface SGIRuntimeModule {
+	template <typename T>
+	Interface SGIRuntimeModule : implements SGISingleton<T>
+	{
 	public:
 		virtual ~SGIRuntimeModule() {};
 

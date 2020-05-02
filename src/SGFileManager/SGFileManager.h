@@ -4,7 +4,7 @@
 
 namespace SG
 {
-	class SGFileManager : implements SGIRuntimeModule
+	class SGFileManager : implements SGIRuntimeModule<SGFileManager>
 	{
 	public:
 		virtual int Initialize() override;

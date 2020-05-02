@@ -3,7 +3,7 @@
 
 namespace SG
 {
-	class SGEventManager : implements SGIRuntimeModule
+	class SGEventManager : implements SGIRuntimeModule<SGEventManager>
 	{
 	public:
 		virtual int Initialize() override;
@@ -11,6 +11,5 @@ namespace SG
 
 		virtual void Tick() override;
 	};
-
-	extern SGIRuntimeModule* g_pEventManager;
+	extern SGIRuntimeModule<SGEventManager>* g_pEventManager;
 }

@@ -7,15 +7,16 @@ target_link_libraries(SGOpenGL
 	LinearMath Bullet3Common BulletDynamics BulletSoftBody
 )
 target_link_libraries(SGOpenGL
-	SGProject
 	SGLog
-	SGTime
+	SGProject
 	SGOpenGLApplication
 	SGOpenGLGraphicsManager
 	SGInputManager
 	SGEventManager
 	SGMemoryManager
 	SGMultiThread
+	SGProcessManager
+	SGTimeManager
 	Utils
 )
 #[[

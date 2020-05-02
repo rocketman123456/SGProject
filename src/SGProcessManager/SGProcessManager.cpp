@@ -3,6 +3,7 @@ using namespace SG;
 
 int SG::ProcessManager::Initialize()
 {
+    m_timer.Initialize(Resolution::High);
     return 0;
 }
 

@@ -19,7 +19,7 @@
 
 namespace SG
 {
-	class SGOpenGLGraphicsManager : implements SGIRuntimeModule
+	class SGOpenGLGraphicsManager : implements SGIRuntimeModule<SGOpenGLGraphicsManager>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:
@@ -73,5 +73,5 @@ namespace SG
 		float currentFrame = 0.0, lastFrame = 0.0, deltaTime = 0.0;
 	};
 
-	extern SGIRuntimeModule* g_pGraphicsManager;
+	extern SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGraphicsManager;
 }

@@ -7,7 +7,7 @@
 
 namespace SG
 {
-	class SGOpenGLApplication : implements SGIApplication 
+	class SGOpenGLApplication : implements SGIApplication<SGOpenGLApplication>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:

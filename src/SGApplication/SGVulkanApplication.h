@@ -7,7 +7,7 @@
 
 namespace SG
 {
-	class SGVulkanApplication : implements SGIApplication
+	class SGVulkanApplication : implements SGIApplication<SGVulkanApplication>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:

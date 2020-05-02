@@ -11,8 +11,8 @@
 
 namespace SG
 {
-	extern SGIApplication* g_pApp;
-	extern SGIRuntimeModule* g_pInputManager;
+	extern SGIApplication<SGOpenGLApplication>* g_pApp;
+	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;
 
 	SG_MEMORYPOOL_DEFINITION(SGOpenGLGraphicsManager);
 	SG_MEMORYPOOL_AUTOINIT(SGOpenGLGraphicsManager, 128);
