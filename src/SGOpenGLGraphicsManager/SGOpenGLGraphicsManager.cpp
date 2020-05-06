@@ -1,6 +1,6 @@
 #include "SGOpenGLGraphicsManager.h"
 #include "SGOpenGLApplication.h"
-#include "SGInputManager.h"
+#include "SGGraphicsManager.h"
 #include "SGTextureLoader.h"
 #include "AssertFault.h"
 #include "SGCubeData.h"
@@ -12,7 +12,7 @@
 namespace SG
 {
 	extern SGIApplication<SGOpenGLApplication>* g_pGLApp;
-	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;
+	extern SGIRuntimeModule<SGGraphicsManager>* g_pGraphicsManager;
 
 	SG_MEMORYPOOL_DEFINITION(SGOpenGLGraphicsManager);
 	SG_MEMORYPOOL_AUTOINIT(SGOpenGLGraphicsManager, 128);
@@ -30,8 +30,8 @@ int SG::SGOpenGLGraphicsManager::Initialize()
 		m_Window = static_cast<SGOpenGLApplication*>(g_pGLApp)->GetGLFWWindow();
 		ASSERT_TRUE(m_Window);
 
-		m_Camera = static_cast<SGInputManager*>(g_pInputManager)->GetCamera();
-		ASSERT_TRUE(m_Camera);
+		m_Camera = static_cast<SGGraphicsManager*>(g_pGraphicsManager)->GetCamera();
+		ASSERT_TRUE(!m_Camera.expired());
 
 		// configure global opengl state
 		// -----------------------------
@@ -80,6 +80,10 @@ void SG::SGOpenGLGraphicsManager::Finalize()
 
 void SG::SGOpenGLGraphicsManager::Tick()
 {
+	if (m_Camera.expired()) {
+		LOG_ERROR("Camera Destroyed");
+	}
+	StrongCameraPtr camera = m_Camera.lock();
 	// per-frame time logic
 	// --------------------
 	currentFrame = glfwGetTime();
@@ -92,9 +96,9 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// view/projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 2000.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)m_Width / (float)m_Height, 0.1f, 2000.0f);
 	//glm::mat4 view = m_Camera->GetViewMatrix();
-	glm::mat4 view = m_Camera->AutoLookAt(glm::vec3(0,0,0));
+	glm::mat4 view = camera->AutoLookAt(glm::vec3(0,0,0));
 
 	// render the loaded model
 	glm::mat4 model = glm::mat4(1.0f);
@@ -105,7 +109,7 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	//m_ModelShader->setMat4("projection", projection);
 	//m_ModelShader->setMat4("view", view);
 	//m_ModelShader->setMat4("model", model);
-	//m_ModelShader->setVec3("cameraPos", m_Camera->Position);
+	//m_ModelShader->setVec3("cameraPos", camera->Position);
 	//m_ModelShader->setFloat("time", glfwGetTime());
 	//m_ModelShader->setFloat("time", 0.0f);
 	//glActiveTexture(GL_TEXTURE4);
@@ -147,7 +151,7 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	}
 
 	// draw skybox as last
-	view = glm::mat4(glm::mat3(m_Camera->GetViewMatrix())); // remove translation from the view matrix
+	view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
 	m_SkyboxShader->use();
 	m_SkyboxShader->setMat4("view", view);
 	m_SkyboxShader->setMat4("projection", projection);

@@ -23,7 +23,7 @@ namespace SG
 	public:
 		virtual ~SGIEventData(void) {}
 		virtual const EventType& GetEventType(void) const = 0;
-		virtual float GetTimeStamp(void) const = 0;
+		virtual double GetTimeStamp(void) const = 0;
 		virtual void Serialize(std::ostrstream& out) const = 0;
 		virtual void Deserialize(std::istrstream& in) = 0;
 		virtual IEventDataPtr Copy(void) const = 0;
@@ -35,6 +35,7 @@ namespace SG
 	//---------------------------------------------------------------------------------------------------------------------
 	class BaseEventData : public SGIEventData
 	{
+	protected:
 		const double m_timeStamp;
 	public:
 		explicit BaseEventData(const float timeStamp = 0.0f) : m_timeStamp(timeStamp) { }
@@ -42,7 +43,7 @@ namespace SG
 		// Returns the type of the event
 		virtual const EventType& GetEventType(void) const = 0;
 
-		float GetTimeStamp(void) const { return m_timeStamp; }
+		double GetTimeStamp(void) const { return m_timeStamp; }
 
 		// Serializing for network input / output
 		//virtual void Serialize(std::ostrstream& out) const { }

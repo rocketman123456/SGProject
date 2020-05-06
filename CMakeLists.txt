@@ -8,7 +8,7 @@ set(CMAKE_RELWITHDEBINFO_POSTFIX "rd" CACHE STRING "add a postfix, usually empty
 set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on windows")
 
 project ("SGProject")
-set (SGOpenGL 0) # use to decide whether to use opengl or vulkan
+set (SGOpenGL 1) # use to decide whether to use opengl or vulkan
 set (SGVulkan ${SGOpenGL})
 set (SGProject_VERSION_MAJOR 0)
 set (SGProject_VERSION_MINOR 1)

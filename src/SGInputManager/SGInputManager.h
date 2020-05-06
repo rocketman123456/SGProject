@@ -1,5 +1,6 @@
 #pragma once
 #include "SGIRuntimeModule.h"
+#include "SGTimeManager.h"
 #include "SGEventManager.h"
 #include "SGSystemEvent.h"
 #include "SGCamera.h"
@@ -26,15 +27,10 @@ namespace SG
 		bool CheckOnPress(int Key);
 		bool CheckOnRelease(int Key);
 		void UpdateCurrentKeys();
-		void UpdatePreviousKeys();
-	public:
-		GLFWwindow* GetGLFWWindow() const { return m_Window; }
-		SGCamera* GetCamera() const { return m_Camera; }
-		int32_t GetWindowWidth() const { return m_Width; }
-		int32_t GetWindowHeight() const { return m_Height; }
+		void UpdatePreviousKeys();	
+
 	protected:
 		GLFWwindow* m_Window = nullptr;
-		SGCamera* m_Camera = nullptr;
 		int32_t m_Width;
 		int32_t m_Height;
 
@@ -43,7 +39,8 @@ namespace SG
 		std::map<int, bool> m_previous;
 		std::map<int, bool> m_current;
 
-		float m_deltaTime = 0.0f, m_lastFrame = 0.0f, m_currentFrame = 0.0f;
+		StrongTimePtr m_timer;
+		float m_deltaTime = 0.0f;
 	};
 
 	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;

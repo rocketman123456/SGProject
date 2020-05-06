@@ -15,8 +15,8 @@ void SG::SGProcessManager::Finalize()
 
 void SG::SGProcessManager::Tick()
 {
-    m_timer->Update();
     double dt = m_timer->GetElapse();
+    m_timer->Update();
     UpdateProcesses(dt);
 }
 

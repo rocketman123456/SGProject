@@ -20,6 +20,9 @@
 
 namespace SG
 {
+	using StrongCameraPtr = std::shared_ptr<SGCamera>;
+	using WeakCameraPtr = std::weak_ptr<SGCamera>;
+
 	class SGOpenGLGraphicsManager : implements SGIRuntimeModule<SGOpenGLGraphicsManager>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
@@ -33,7 +36,6 @@ namespace SG
 	public:
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 		SGShader* GetShader() const { return m_LightingShader; }
-		SGCamera* GetCamera() const { return m_Camera; }
 		int32_t GetWindowWidth() const { return m_Width; }
 		int32_t GetWindowHeight() const { return m_Height; }
 
@@ -48,7 +50,7 @@ namespace SG
 		int32_t m_ShadowWidth;
 		int32_t m_ShadowHeight;
 
-		SGCamera* m_Camera;
+		WeakCameraPtr m_Camera;
 		SGModel* m_NanoSuitModel;
 		
 		SGShader* m_LightingShader;

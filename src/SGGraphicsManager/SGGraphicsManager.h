@@ -4,6 +4,7 @@
 #include "SGVulkanGraphicsManager.h"
 #include "SGEventManager.h"
 #include "SGSystemEvent.h"
+#include "SGCamera.h"
 
 namespace SG
 {
@@ -14,7 +15,10 @@ namespace SG
 		OpenGL = 0,
 		Vulkan,
 	};
-	// TODO: use uniform graphics manager to render
+	
+	using StrongCameraPtr = std::shared_ptr<SGCamera>;
+	using WeakCameraPtr = std::weak_ptr<SGCamera>;
+
 	class SGGraphicsManager : implements SGIRuntimeModule<SGGraphicsManager>
 	{
 	public:
@@ -23,8 +27,14 @@ namespace SG
 
 		virtual void Tick();
 
+		inline WeakCameraPtr GetCamera() { return WeakCameraPtr(m_Camera); }
+
 		void HelloEventHandle(IEventDataPtr event);
+		void CameraMoveEventHandle(IEventDataPtr event);
+		void CameraScrollEventHandle(IEventDataPtr event);
+		void CameraPosMoveEventHandle(IEventDataPtr event);
 	protected:
 		RenderMethod m_method;
+		StrongCameraPtr m_Camera;
 	};
 }
