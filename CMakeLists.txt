@@ -85,7 +85,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGMultiThread"
 	"${PROJECT_SOURCE_DIR}/src/SGProcessManager"
 	"${PROJECT_SOURCE_DIR}/src/SGProject"
-	"${PROJECT_SOURCE_DIR}/src/SGTimeManager"
+	"${PROJECT_SOURCE_DIR}/src/SGTimeFactory"
 )
 
 add_subdirectory ("src")

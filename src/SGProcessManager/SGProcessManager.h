@@ -1,5 +1,5 @@
 #include "SGIRuntimeModule.h"
-#include "SGTimeManager.h"
+#include "SGTimeFactory.h"
 #include "SGProcess.h"
 #include <list>
 

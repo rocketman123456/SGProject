@@ -11,7 +11,7 @@ int SG::SGEventManager::Initialize()
 {
 	m_Name = "SGEventManager";
 	m_activeQueue = 0;
-	m_timer = SGTimeManager::GetSingleton().GetTime();
+	m_timer = SGTimeFactory::GetTimer();
 	m_timer->Initialize(Resolution::High);
 	LOG_INFO("SGEventManager Initialize");
 	return 0;

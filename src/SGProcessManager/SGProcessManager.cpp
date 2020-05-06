@@ -3,7 +3,7 @@ using namespace SG;
 
 int SG::SGProcessManager::Initialize()
 {
-    m_timer = SGTimeManager::GetSingleton().GetTime();
+    m_timer = SGTimeFactory::GetTimer();
     m_timer->Initialize(Resolution::High);
     return 0;
 }

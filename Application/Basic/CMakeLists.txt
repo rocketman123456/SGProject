@@ -21,6 +21,6 @@ target_link_libraries(SGBasic
 	SGMemoryManager
 	SGMultiThread
 	SGProcessManager
-	SGTimeManager
+	SGTimeFactory
 	Utils
 )

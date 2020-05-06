@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.8)
 
-add_library(SGTimeManager 
+add_library(SGTimeFactory 
 	SGTime.cpp
-	SGTimeManager.cpp
+	"SGTimeFactory.cpp"
 )

@@ -1,5 +1,4 @@
 #pragma once
-#include "SGIRuntimeModule.h"
 #include "SGTime.h"
 #include <vector>
 #include <memory>
@@ -11,14 +10,9 @@ namespace SG
 	typedef std::shared_ptr<SGTime> StrongTimePtr;
 	typedef std::weak_ptr<SGTime> WeakTimePtr;
 
-	class SGTimeManager : implements SGIRuntimeModule<SGTimeManager>
+	class SGTimeFactory
 	{
 	public:
-		virtual int Initialize();
-		virtual void Finalize();
-
-		virtual void Tick() {}
-
-		StrongTimePtr GetTime();
+		static StrongTimePtr GetTimer();
 	};
 }

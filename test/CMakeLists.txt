@@ -7,7 +7,7 @@ add_executable (sqlite_test "sqlite_test.cpp")
 target_link_libraries (sqlite_test sqlite3)
 
 add_executable (sg_time_test "sgtime_test.cpp")
-target_link_libraries(sg_time_test SGTimeManager)
+target_link_libraries(sg_time_test SGTimeFactory)
 
 add_executable (event_test "event_test.cpp")
 target_link_libraries (event_test SGMultiThread Utils SGLog)

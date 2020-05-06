@@ -1,6 +1,6 @@
 #pragma once
 #include "SGIRuntimeModule.h"
-#include "SGTimeManager.h"
+#include "SGTimeFactory.h"
 #include "SGEventManager.h"
 #include "SGSystemEvent.h"
 #include "SGCamera.h"

@@ -1,7 +1,7 @@
 #pragma once
 #include "SGIRuntimeModule.h"
 #include "SGIEventData.h"
-#include "SGTimeManager.h"
+#include "SGTimeFactory.h"
 #include "GenericObjectFactory.h"
 
 #include <string>

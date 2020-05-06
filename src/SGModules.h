@@ -6,7 +6,7 @@
 #include "SGProcessManager.h"
 #include "SGEventManager.h"
 #include "SGInputManager.h"
-#include "SGTimeManager.h"
+#include "SGTimeFactory.h"
 
 #include "SGApplication.h"
 #include "SGGraphicsManager.h"
@@ -21,7 +21,6 @@ namespace SG
 	extern SGIApplication<SGApplication>* g_pApp;
 	extern SGIApplication<SGOpenGLApplication>* g_pGLApp;
 	extern SGIApplication<SGVulkanApplication>* g_pVKApp;
-	extern SGIRuntimeModule<SGTimeManager>* g_pTimeManager;
 	extern SGIRuntimeModule<SGProcessManager>* g_pProcessManager;
 	extern SGIRuntimeModule<SGEventManager>* g_pEventManager;
 	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;

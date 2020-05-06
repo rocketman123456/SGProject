@@ -31,8 +31,10 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	std::shared_ptr<SG::Evt_CameraMove> pCamera(SG_NEW SG::Evt_CameraMove(xoffset, yoffset));
-	SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
+	if (mouseControl) {
+		std::shared_ptr<SG::Evt_CameraMove> pCamera(SG_NEW SG::Evt_CameraMove(xoffset, yoffset));
+		SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
+	}
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -54,7 +56,7 @@ int SG::SGInputManager::Initialize()
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetScrollCallback(m_Window, scroll_callback);
 
-	m_timer = SGTimeManager::GetSingleton().GetTime();
+	m_timer = SGTimeFactory::GetTimer();
 	m_timer->Initialize(Resolution::High);
 	LOG_INFO("SGInputManager Initialize");
 	return 0;
@@ -101,31 +103,30 @@ void SG::SGInputManager::Tick()
 	m_timer->Update();
 	UpdateCurrentKeys();
 
-	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(m_Window, true);
+	}
 
-	if (mouseControl) {
-		Camera_Movement move = FORWARD;
-		if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
-			move = FORWARD;
-			std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
-			SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
-		}
-		if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
-			move = BACKWARD;
-			std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
-			SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
-		}
-		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS) {
-			move = LEFT;
-			std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
-			SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
-		}
-		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
-			move = RIGHT;
-			std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
-			SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
-		}
+	Camera_Movement move = FORWARD;
+	if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS) {
+		move = FORWARD;
+		std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
+		SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
+	}
+	if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS) {
+		move = BACKWARD;
+		std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
+		SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
+	}
+	if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS) {
+		move = LEFT;
+		std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
+		SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
+	}
+	if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
+		move = RIGHT;
+		std::shared_ptr<SG::Evt_CameraPosMove> pCamera(SG_NEW SG::Evt_CameraPosMove(move, m_deltaTime));
+		SG::SGEventManager::GetSingleton().QueueEvent(pCamera);
 	}
 
 	if (CheckOnPress(GLFW_KEY_E)) {

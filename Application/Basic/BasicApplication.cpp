@@ -7,7 +7,7 @@
 #include "SGEventManager.h"
 #include "SGInputManager.h"
 #include "SGProcessManager.h"
-#include "SGTimeManager.h"
+#include "SGTimeFactory.h"
 #include "SGLog.h"
 
 namespace SG
@@ -16,7 +16,6 @@ namespace SG
 	SGIApplication<SGApplication>* g_pApp = &SGApplication::GetSingleton();
 	SGIApplication<SGOpenGLApplication>* g_pGLApp = &SGOpenGLApplication::GetSingleton();
 	SGIApplication<SGVulkanApplication>* g_pVKApp = &SGVulkanApplication::GetSingleton();
-	SGIRuntimeModule<SGTimeManager>* g_pTimeManager = &SGTimeManager::GetSingleton();
 	SGIRuntimeModule<SGProcessManager>* g_pProcessManager = &SGProcessManager::GetSingleton();
 	SGIRuntimeModule<SGEventManager>* g_pEventManager = &SGEventManager::GetSingleton();
 	SGIRuntimeModule<SGInputManager>* g_pInputManager = &SGInputManager::GetSingleton();

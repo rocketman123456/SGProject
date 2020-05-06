@@ -7,13 +7,10 @@ int SGMain()
 	int ret;
 	do {
 		if ((ret = g_pLog->Initialize()) != 0) { break; }
-		LOG_INFO("Hello SGProject.");
+		LOG_INFO("SGProject Start.");
 
 		if ((ret = g_pApp->Initialize()) != 0) {
 			LOG_ERROR("Application Initialize Failed."); break;
-		}
-		if ((ret = g_pTimeManager->Initialize()) != 0) {
-			LOG_ERROR("TimeManager Initialize Failed."); break;
 		}
 		if ((ret = g_pEventManager->Initialize()) != 0) {
 			LOG_ERROR("EventManager Initialize Failed."); break;
@@ -28,7 +25,6 @@ int SGMain()
 		while (!g_pApp->IsQuit())
 		{
 			g_pApp->Tick();
-			g_pTimeManager->Tick();
 			g_pEventManager->Tick();
 			g_pInputManager->Tick();
 			g_pGraphicsManager->Tick();
@@ -37,7 +33,6 @@ int SGMain()
 		g_pGraphicsManager->Finalize();
 		g_pInputManager->Finalize();
 		g_pEventManager->Finalize();
-		g_pTimeManager->Finalize();
 		g_pApp->Finalize();
 	} while (false);
 
