@@ -3,6 +3,7 @@
 #include "SGTime.h"
 #include <vector>
 #include <memory>
+#include <list>
 
 namespace SG
 {
@@ -16,10 +17,8 @@ namespace SG
 		virtual int Initialize();
 		virtual void Finalize();
 
-		virtual void Tick();
+		virtual void Tick() {}
 
 		StrongTimePtr GetTime();
-	protected:
-		std::vector<WeakTimePtr> m_TimerList;
 	};
 }

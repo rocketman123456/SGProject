@@ -27,13 +27,14 @@ namespace SG
 		void GenerateDateString(); // may get down the performance
 		void DisplayTime(); // this function is for debug
 
-		inline const std::string& GetDateString() { return m_DateString; }
+		double GetElapse();
+
 		inline double GetCurrentTime() { return m_CurrentTime; }
-		inline double GetElapse() { return m_Elapse; }
 		inline void SetPaused(bool pause) { m_isPause = pause; }
 		inline bool IsPaused() { return m_isPause; }
 		inline void SetTimeScale(double scale) { m_TimeScale = scale; }
 		inline double GetTimeScale() { return m_TimeScale; }
+		inline const std::string& GetDateString() { return m_DateString; }
 	protected:
 		Resolution m_Resolution;
 		std::string m_DateString; // can be use for save data

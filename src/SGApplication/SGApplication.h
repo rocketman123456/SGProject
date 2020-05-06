@@ -2,6 +2,8 @@
 #include "SGIApplication.h"
 #include "SGOpenGLApplication.h"
 #include "SGVulkanApplication.h"
+#include "SGEventManager.h"
+#include "SGSystemEvent.h"
 #include "SGConfig.h"
 
 namespace SG

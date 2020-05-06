@@ -9,7 +9,7 @@ set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on w
 
 project ("SGProject")
 set (SGOpenGL 0) # use to decide whether to use opengl or vulkan
-set (SGVulkan 1)
+set (SGVulkan ${SGOpenGL})
 set (SGProject_VERSION_MAJOR 0)
 set (SGProject_VERSION_MINOR 1)
 set (PROJECT_ASSET_DIR ${PROJECT_SOURCE_DIR})
@@ -32,6 +32,7 @@ find_package(Bullet CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 find_package(SOIL CONFIG REQUIRED)
+find_package(freetype CONFIG REQUIRED)
 
 #find_package(glslang CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE glslang::HLSL glslang::SPIRV glslang::glslang glslang::OGLCompiler)
@@ -53,6 +54,7 @@ find_package(SOIL CONFIG REQUIRED)
 #target_link_libraries(main ${Vulkan_LIBRARIES})
 #target_link_libraries(main PRIVATE assimp::assimp)
 #target_link_libraries(main PRIVATE ZLIB::ZLIB)
+#target_link_libraries(main PRIVATE freetype)
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/Config/SGConfig.h.in"

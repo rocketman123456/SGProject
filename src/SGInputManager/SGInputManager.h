@@ -1,5 +1,7 @@
 #pragma once
 #include "SGIRuntimeModule.h"
+#include "SGEventManager.h"
+#include "SGSystemEvent.h"
 #include "SGCamera.h"
 
 #define GLFW_INCLUDE_VULKAN

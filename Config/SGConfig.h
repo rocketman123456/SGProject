@@ -5,4 +5,4 @@
 #define	SGProject_ASSET_DIR	"D:/Programming/SGProject/Assets/"
 
 #define SGOpenGL 0
-#define SGVulkan 1
+#define SGVulkan 0

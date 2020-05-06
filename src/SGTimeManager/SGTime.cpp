@@ -18,31 +18,33 @@ void SG::SGTime::Update()
 	if (!m_isPause)
 	{
 		m_TimeCurrent = SystemClock::now();
-		switch (m_Resolution)
-		{
-		case Resolution::Low: {
-			Seconds duration = std::chrono::duration_cast<Seconds>(m_TimeCurrent - m_TimePrevious);
-			m_Elapse = double(duration.count()) * Seconds::period::num / Seconds::period::den * m_TimeScale;
-		} break;
-		case Resolution::Normal: {
-			MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
-			m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
-		} break;
-		case Resolution::High: {
-			ManoSeconds duration = std::chrono::duration_cast<ManoSeconds>(m_TimeCurrent - m_TimePrevious);
-			m_Elapse = double(duration.count()) * ManoSeconds::period::num / ManoSeconds::period::den * m_TimeScale;
-		} break;
-		default:
-			break;
-		}
 		m_TimePrevious = m_TimeCurrent;
 	}
-	else
-	{
+}
+
+double SG::SGTime::GetElapse()
+{
+	if (!m_isPause) {
 		m_TimeCurrent = SystemClock::now();
-		m_Elapse = 0.0;
 	}
-	m_CurrentTime += m_Elapse;
+	switch (m_Resolution)
+	{
+	case Resolution::Low: {
+		Seconds duration = std::chrono::duration_cast<Seconds>(m_TimeCurrent - m_TimePrevious);
+		m_Elapse = double(duration.count()) * Seconds::period::num / Seconds::period::den * m_TimeScale;
+	} break;
+	case Resolution::Normal: {
+		MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
+		m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
+	} break;
+	case Resolution::High: {
+		ManoSeconds duration = std::chrono::duration_cast<ManoSeconds>(m_TimeCurrent - m_TimePrevious);
+		m_Elapse = double(duration.count()) * ManoSeconds::period::num / ManoSeconds::period::den * m_TimeScale;
+	} break;
+	default:
+		break;
+	}
+	return m_Elapse;
 }
 
 void SG::SGTime::SingleStep()

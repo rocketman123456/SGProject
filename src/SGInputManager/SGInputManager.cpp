@@ -32,7 +32,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastY = ypos;
 
 	// TODO: use event to send data, not direct call
-	static_cast<SG::SGInputManager*>(SG::g_pInputManager)->GetCamera()->ProcessMouseMovement(xoffset, yoffset);
+	SG::SGInputManager::GetSingleton().GetCamera()->ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -53,6 +53,8 @@ int SG::SGInputManager::Initialize()
 	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetScrollCallback(m_Window, scroll_callback);
+
+	// add event listener
 
 	LOG_INFO("SGInputManager Initialize");
 	return 0;
@@ -119,6 +121,14 @@ void SG::SGInputManager::Tick()
 		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS) {
 			m_Camera->ProcessKeyboard(RIGHT, m_deltaTime);
 		}
+	}
+
+	if (CheckOnPress(GLFW_KEY_E)) {
+		std::string word = "Hello_World";
+		std::istrstream in(word.c_str());
+		std::shared_ptr<SG::Evt_Word> pHello(SG_NEW SG::Evt_Word("Hello Event"));
+		pHello->Deserialize(in);
+		SGEventManager::GetSingleton().QueueEvent(pHello);
 	}
 
 	if (CheckOnPress(GLFW_KEY_F)) {

@@ -2,6 +2,8 @@
 #include "SGIRuntimeModule.h"
 #include "SGOpenGLGraphicsManager.h"
 #include "SGVulkanGraphicsManager.h"
+#include "SGEventManager.h"
+#include "SGSystemEvent.h"
 
 namespace SG
 {
@@ -20,7 +22,9 @@ namespace SG
 		virtual void Finalize();
 
 		virtual void Tick();
-	protected:
 
+		void HelloEventHandle(IEventDataPtr event);
+	protected:
+		RenderMethod m_method;
 	};
 }

@@ -16,6 +16,10 @@ int SG::SGApplication::Initialize()
 		m_Height = static_cast<SGVulkanApplication*>(g_pVKApp)->GetWindowHeight();
 		m_Window = static_cast<SGVulkanApplication*>(g_pVKApp)->GetGLFWWindow();
 	}
+
+	// register events
+	REGISTER_EVENT(Evt_Word);
+
 	LOG_INFO("SGApplication Initialize");
 	return result;
 }
