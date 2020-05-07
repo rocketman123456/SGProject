@@ -3,6 +3,7 @@ using namespace SG;
 
 void SGCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
+    std::lock_guard<std::mutex> lockGuard(mutex);
     float velocity = MovementSpeed * deltaTime;
     if (direction == FORWARD)
         Position += Front * velocity;
@@ -16,6 +17,7 @@ void SGCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 
 void SGCamera::ProcessMouseMovement(float xoffset, float yoffset, uint8_t constrainPitch)
 {
+    std::lock_guard<std::mutex> lockGuard(mutex);
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
@@ -36,6 +38,7 @@ void SGCamera::ProcessMouseMovement(float xoffset, float yoffset, uint8_t constr
 
 void SGCamera::ProcessMouseScroll(float yoffset)
 {
+    std::lock_guard<std::mutex> lockGuard(mutex);
     if (Zoom >= 1.0f && Zoom <= 45.0f)
         Zoom -= yoffset;
     if (Zoom <= 1.0f)

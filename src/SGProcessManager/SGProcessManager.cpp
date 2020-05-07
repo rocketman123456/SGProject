@@ -1,23 +1,27 @@
 #include "SGProcessManager.h"
+#include "SGLog.h"
 using namespace SG;
 
 int SG::SGProcessManager::Initialize()
 {
     m_timer = SGTimeFactory::GetTimer();
     m_timer->Initialize(Resolution::High);
+    LOG_INFO("SGProcessManager Initialize");
     return 0;
 }
 
 void SG::SGProcessManager::Finalize()
 {
     ClearAllProcesses();
+    LOG_INFO("SGProcessManager Finalize");
 }
 
 void SG::SGProcessManager::Tick()
 {
-    double dt = m_timer->GetElapse();
+    static double dt = 0.0;
     m_timer->Update();
     UpdateProcesses(dt);
+    dt = m_timer->GetElapse();
 }
 
 //---------------------------------------------------------------------------------------------------------------------

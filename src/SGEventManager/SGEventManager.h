@@ -64,6 +64,7 @@ namespace SG
 		typedef std::map<EventType, EventListenerList> EventListenerMap;
 		typedef std::list<IEventDataPtr> EventQueue;
 	protected:
+		uint64_t m_MaxMS;
 		std::string m_Name;
 		StrongTimePtr m_timer;
 		EventListenerMap m_eventListeners;

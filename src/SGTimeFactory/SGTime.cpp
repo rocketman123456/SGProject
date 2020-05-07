@@ -6,6 +6,9 @@
 using namespace std;
 using namespace SG;
 
+// first update timer
+// second get elapse to update point
+
 void SG::SGTime::Initialize(Resolution res)
 {
 	m_Resolution = res;

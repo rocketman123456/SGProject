@@ -12,7 +12,7 @@ namespace SG
 static float lastX = 0.0f;
 static float lastY = 0.0f;
 static bool firstMouse = true;
-static bool mouseControl = true;
+static bool mouseControl = false;
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
@@ -52,7 +52,7 @@ int SG::SGInputManager::Initialize()
 	m_Window = static_cast<SGApplication*>(g_pApp)->GetGLFWWindow();
 	ASSERT_TRUE(m_Window);
 
-	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetScrollCallback(m_Window, scroll_callback);
 

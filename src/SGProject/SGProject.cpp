@@ -1,6 +1,23 @@
 ﻿// SGProject.cpp: 定义应用程序的入口点。
 #include "SGProject.h"
+#include <thread>
 using namespace SG;
+
+void EventLoop()
+{
+	while (!g_pApp->IsQuit())
+	{
+		g_pEventManager->Tick();
+	}
+}
+
+void ProcessLoop()
+{
+	while (!g_pApp->IsQuit())
+	{
+		g_pProcessManager->Tick();
+	}
+}
 
 int SGMain()
 {
@@ -15,6 +32,9 @@ int SGMain()
 		if ((ret = g_pEventManager->Initialize()) != 0) {
 			LOG_ERROR("EventManager Initialize Failed."); break;
 		}
+		if ((ret = g_pProcessManager->Initialize()) != 0) {
+			LOG_ERROR("ProcessManager Initialize Failed."); break;
+		}
 		if ((ret = g_pInputManager->Initialize()) != 0) {
 			LOG_ERROR("InputManager Initialize Failed."); break;
 		}
@@ -22,16 +42,27 @@ int SGMain()
 			LOG_ERROR("GraphicsManager Initialize Failed."); break;
 		}
 
+		std::thread eventloop(EventLoop);
+		std::thread processloop(ProcessLoop);
+		if (eventloop.joinable()) { eventloop.detach(); }
+		if (processloop.joinable()) { processloop.detach(); }
+
 		while (!g_pApp->IsQuit())
 		{
+			auto start = std::chrono::high_resolution_clock::now();
 			g_pApp->Tick();
-			g_pEventManager->Tick();
 			g_pInputManager->Tick();
 			g_pGraphicsManager->Tick();
+			auto elapsed = std::chrono::high_resolution_clock::now() - start;
+			auto ms = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+			if (ms < 30) {
+				std::this_thread::sleep_for(std::chrono::microseconds(30 - ms));
+			}
 		}
 
 		g_pGraphicsManager->Finalize();
 		g_pInputManager->Finalize();
+		g_pProcessManager->Finalize();
 		g_pEventManager->Finalize();
 		g_pApp->Finalize();
 	} while (false);

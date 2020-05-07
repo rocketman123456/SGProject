@@ -9,6 +9,7 @@ namespace SG
 
 int SG::SGEventManager::Initialize()
 {
+	m_MaxMS = 30;
 	m_Name = "SGEventManager";
 	m_activeQueue = 0;
 	m_timer = SGTimeFactory::GetTimer();
@@ -25,7 +26,7 @@ void SG::SGEventManager::Finalize()
 void SG::SGEventManager::Tick()
 {
 	m_timer->Update();
-	Update(40);
+	Update(m_MaxMS);
 }
 
 bool SG::SGEventManager::AddListener(const EventListenerDelegate& eventDelegate, const EventType& type)
@@ -233,6 +234,12 @@ bool SG::SGEventManager::Update(uint64_t maxMillis)
 			m_queues[queueToProcess].pop_back();
 			m_queues[m_activeQueue].push_front(pEvent);
 		}
+	}
+
+	currMs = m_timer->GetElapse();
+	if (maxMillis != kINFINITE && currMs < maxMs)
+	{
+		std::this_thread::sleep_for(std::chrono::microseconds(maxMs - currMs));
 	}
 
 	return queueFlushed;

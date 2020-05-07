@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+#include <thread>
+#include<mutex>
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
@@ -23,6 +25,7 @@ namespace SG
     // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
     class SGCamera
     {
+        std::mutex mutex;
     public:
         // Camera Attributes
         glm::vec3 Position;
@@ -39,7 +42,8 @@ namespace SG
         float Zoom;
 
         // Constructor with vectors
-        SGCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+        SGCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) 
+            : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
         {
             Position = position;
             WorldUp = up;
@@ -48,7 +52,8 @@ namespace SG
             UpdateCameraVectors();
         }
         // Constructor with scalar values
-        SGCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+        SGCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) 
+            : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
         {
             Position = glm::vec3(posX, posY, posZ);
             WorldUp = glm::vec3(upX, upY, upZ);
@@ -59,6 +64,7 @@ namespace SG
 
         glm::mat4 AutoLookAt(glm::vec3 pos)
         {
+            std::lock_guard<std::mutex> lockGuard(mutex);
             Front = glm::normalize(pos - Position);
             Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
             Up = glm::normalize(glm::cross(Right, Front));
@@ -68,6 +74,7 @@ namespace SG
         // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
         glm::mat4 GetViewMatrix()
         {
+            std::lock_guard<std::mutex> lockGuard(mutex);
             return glm::lookAt(Position, Position + Front, Up);
         }
 
