@@ -1,6 +1,7 @@
 ﻿// SGProject.cpp: 定义应用程序的入口点。
 #include "SGProject.h"
 #include <thread>
+#include <condition_variable>
 using namespace SG;
 
 void EventLoop()
@@ -19,6 +20,14 @@ void ProcessLoop()
 	}
 }
 
+void FileLoop()
+{
+	while (!g_pApp->IsQuit())
+	{
+		g_pFileManager->Tick();
+	}
+}
+
 int SGMain()
 {
 	int ret;
@@ -28,6 +37,9 @@ int SGMain()
 
 		if ((ret = g_pApp->Initialize()) != 0) {
 			LOG_ERROR("Application Initialize Failed."); break;
+		}
+		if ((ret = g_pFileManager->Initialize()) != 0) {
+			LOG_ERROR("FileManager Initialize Failed."); break;
 		}
 		if ((ret = g_pEventManager->Initialize()) != 0) {
 			LOG_ERROR("EventManager Initialize Failed."); break;
@@ -44,8 +56,10 @@ int SGMain()
 
 		std::thread eventloop(EventLoop);
 		std::thread processloop(ProcessLoop);
+		std::thread fileloop(FileLoop);
 		if (eventloop.joinable()) { eventloop.detach(); }
 		if (processloop.joinable()) { processloop.detach(); }
+		if (fileloop.joinable()) { fileloop.detach(); }
 
 		while (!g_pApp->IsQuit())
 		{
@@ -64,6 +78,7 @@ int SGMain()
 		g_pInputManager->Finalize();
 		g_pProcessManager->Finalize();
 		g_pEventManager->Finalize();
+		g_pFileManager->Finalize();
 		g_pApp->Finalize();
 	} while (false);
 

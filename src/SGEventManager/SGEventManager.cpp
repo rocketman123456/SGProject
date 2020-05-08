@@ -236,12 +236,6 @@ bool SG::SGEventManager::Update(uint64_t maxMillis)
 		}
 	}
 
-	currMs = m_timer->GetElapse();
-	if (maxMillis != kINFINITE && currMs < maxMs)
-	{
-		std::this_thread::sleep_for(std::chrono::microseconds(maxMs - currMs));
-	}
-
 	return queueFlushed;
 }
 

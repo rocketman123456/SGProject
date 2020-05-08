@@ -18,6 +18,7 @@ target_link_libraries(SGBasic
 
 	SGInputManager
 	SGEventManager
+	SGFileManager
 	SGMemoryManager
 	SGMultiThread
 	SGProcessManager

@@ -4,6 +4,14 @@
 
 namespace SG
 {
+	enum File_Type
+	{
+		UNKNOWN = 0,
+		TEXT,
+		TEXTURE,
+		MODEL,
+	};
+
 	class SGFileManager : implements SGIRuntimeModule<SGFileManager>
 	{
 	public:

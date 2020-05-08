@@ -23,6 +23,7 @@ int SG::SGGraphicsManager::Initialize()
 		result = g_pVKGraphicsManager->Initialize();
 	}
 
+	LOG_INFO("SGGraphicsManager Initialize");
 	return 0;
 }
 
@@ -44,6 +45,8 @@ void SG::SGGraphicsManager::Finalize()
 	SGEventManager::GetSingleton().RemoveListener(camerascrollFunc, Evt_CameraScroll::sk_EventType);
 	EventListenerDelegate cameraposmoveFunc = fastdelegate::MakeDelegate(this, &SG::SGGraphicsManager::CameraPosMoveEventHandle);
 	SGEventManager::GetSingleton().RemoveListener(cameraposmoveFunc, Evt_CameraPosMove::sk_EventType);
+
+	LOG_INFO("SGGraphicsManager Finalize");
 }
 
 void SG::SGGraphicsManager::Tick()

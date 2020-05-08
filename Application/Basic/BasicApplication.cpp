@@ -5,6 +5,7 @@
 #include "SGGraphicsManager.h"
 #include "SGApplication.h"
 #include "SGEventManager.h"
+#include "SGFileManager.h"
 #include "SGInputManager.h"
 #include "SGProcessManager.h"
 #include "SGTimeFactory.h"
@@ -18,6 +19,7 @@ namespace SG
 	SGIApplication<SGVulkanApplication>* g_pVKApp = &SGVulkanApplication::GetSingleton();
 	SGIRuntimeModule<SGProcessManager>* g_pProcessManager = &SGProcessManager::GetSingleton();
 	SGIRuntimeModule<SGEventManager>* g_pEventManager = &SGEventManager::GetSingleton();
+	SGIRuntimeModule<SGFileManager>* g_pFileManager = &SGFileManager::GetSingleton();
 	SGIRuntimeModule<SGInputManager>* g_pInputManager = &SGInputManager::GetSingleton();
 	SGIRuntimeModule<SGGraphicsManager>* g_pGraphicsManager = &SGGraphicsManager::GetSingleton();
 	SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGLGraphicsManager = &SGOpenGLGraphicsManager::GetSingleton();
