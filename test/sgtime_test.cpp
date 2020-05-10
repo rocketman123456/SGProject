@@ -8,7 +8,7 @@ using namespace SG;
 
 int main(void)
 {
-    SGTime time;
+    SGTimeHigh time;
     time.DisplayTime();
     return 0;
 }

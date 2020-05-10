@@ -13,6 +13,6 @@ namespace SG
 	class SGTimeFactory
 	{
 	public:
-		static StrongTimePtr GetTimer();
+		static StrongTimePtr GetTimer(Resolution res);
 	};
 }

@@ -24,7 +24,7 @@ int SG::SGGraphicsManager::Initialize()
 	}
 
 	LOG_INFO("SGGraphicsManager Initialize");
-	return 0;
+	return result;
 }
 
 void SG::SGGraphicsManager::Finalize()

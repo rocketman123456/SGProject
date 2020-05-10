@@ -9,13 +9,6 @@ using namespace SG;
 // first update timer
 // second get elapse to update point
 
-void SG::SGTime::Initialize(Resolution res)
-{
-	m_Resolution = res;
-	m_TimeCurrent = SystemClock::now();
-	m_TimePrevious = m_TimeCurrent;
-}
-
 void SG::SGTime::Update()
 {
 	if (!m_isPause)
@@ -23,31 +16,6 @@ void SG::SGTime::Update()
 		m_TimeCurrent = SystemClock::now();
 		m_TimePrevious = m_TimeCurrent;
 	}
-}
-
-double SG::SGTime::GetElapse()
-{
-	if (!m_isPause) {
-		m_TimeCurrent = SystemClock::now();
-	}
-	switch (m_Resolution)
-	{
-	case Resolution::Low: {
-		Seconds duration = std::chrono::duration_cast<Seconds>(m_TimeCurrent - m_TimePrevious);
-		m_Elapse = double(duration.count()) * Seconds::period::num / Seconds::period::den * m_TimeScale;
-	} break;
-	case Resolution::Normal: {
-		MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
-		m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
-	} break;
-	case Resolution::High: {
-		ManoSeconds duration = std::chrono::duration_cast<ManoSeconds>(m_TimeCurrent - m_TimePrevious);
-		m_Elapse = double(duration.count()) * ManoSeconds::period::num / ManoSeconds::period::den * m_TimeScale;
-	} break;
-	default:
-		break;
-	}
-	return m_Elapse;
 }
 
 void SG::SGTime::SingleStep()
@@ -79,4 +47,34 @@ void SG::SGTime::GenerateDateString()
 	std::stringstream ss;
 	ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
 	m_DateString = ss.str();
+}
+
+double SGTimeHigh::GetElapse()
+{
+	if (!m_isPause) {
+		m_TimeCurrent = SystemClock::now();
+	}
+	ManoSeconds duration = std::chrono::duration_cast<ManoSeconds>(m_TimeCurrent - m_TimePrevious);
+	m_Elapse = double(duration.count()) * ManoSeconds::period::num / ManoSeconds::period::den * m_TimeScale;
+	return m_Elapse;
+}
+
+double SGTimeNormal::GetElapse()
+{
+	if (!m_isPause) {
+		m_TimeCurrent = SystemClock::now();
+	}
+	MicroSeconds duration = std::chrono::duration_cast<MicroSeconds>(m_TimeCurrent - m_TimePrevious);
+	m_Elapse = double(duration.count()) * MicroSeconds::period::num / MicroSeconds::period::den * m_TimeScale;
+	return m_Elapse;
+}
+
+double SGTimeLow::GetElapse()
+{
+	if (!m_isPause) {
+		m_TimeCurrent = SystemClock::now();
+	}
+	Seconds duration = std::chrono::duration_cast<Seconds>(m_TimeCurrent - m_TimePrevious);
+	m_Elapse = double(duration.count()) * Seconds::period::num / Seconds::period::den * m_TimeScale;
+	return m_Elapse;
 }

@@ -12,8 +12,7 @@ int SG::SGEventManager::Initialize()
 	m_MaxMS = 30;
 	m_Name = "SGEventManager";
 	m_activeQueue = 0;
-	m_timer = SGTimeFactory::GetTimer();
-	m_timer->Initialize(Resolution::High);
+	m_timer = SGTimeFactory::GetTimer(Resolution::Normal);
 	LOG_INFO("SGEventManager Initialize");
 	return 0;
 }

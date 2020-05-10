@@ -4,8 +4,7 @@ using namespace SG;
 
 int SG::SGProcessManager::Initialize()
 {
-    m_timer = SGTimeFactory::GetTimer();
-    m_timer->Initialize(Resolution::High);
+    m_timer = SGTimeFactory::GetTimer(Resolution::Normal);
     LOG_INFO("SGProcessManager Initialize");
     return 0;
 }
