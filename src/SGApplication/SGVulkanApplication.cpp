@@ -18,8 +18,8 @@ int SG::SGVulkanApplication::Initialize()
 {
 	int result = 0;
 	do {
-		result += InitWindow();
-		result += InitVulkan();
+		result = InitWindow();
+		if (result) { break; }
 	} while (false);
 
 	LOG_INFO("SGVulkanApplication Initialize");
@@ -39,8 +39,6 @@ void SG::SGVulkanApplication::Finalize()
 void SG::SGVulkanApplication::Tick()
 {
 	m_bQuit = glfwWindowShouldClose(m_Window);
-
-	glfwPollEvents();
 }
 
 bool SG::SGVulkanApplication::IsQuit()
@@ -63,44 +61,6 @@ int SG::SGVulkanApplication::InitWindow()
 		LOG_ERROR("Failed to create GLFW window");
 		glfwTerminate();
 		result = 1;
-	}
-	return result;
-}
-
-int SG::SGVulkanApplication::InitVulkan()
-{
-	int result = 0;
-	result += CreateInstance();
-	return result;
-}
-
-int SG::SGVulkanApplication::CreateInstance()
-{
-	int result = 0;
-	VkApplicationInfo appInfo{};
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "Hello Vulkan";
-	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.pEngineName = "No Engine";
-	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
-
-	VkInstanceCreateInfo createInfo{};
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	createInfo.pApplicationInfo = &appInfo;
-
-	uint32_t glfwExtensionCount = 0;
-	const char** glfwExtensions;
-	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-	createInfo.enabledExtensionCount = glfwExtensionCount;
-	createInfo.ppEnabledExtensionNames = glfwExtensions;
-
-	createInfo.enabledLayerCount = 0;
-
-	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
-		result = 1;
-		LOG_ERROR("failed to create instance!");
 	}
 	return result;
 }

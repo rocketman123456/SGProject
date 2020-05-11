@@ -4,4 +4,4 @@
 #define SGProject_SOURCE_DIR "D:/Programming/SGProject"
 #define	SGProject_ASSET_DIR	"D:/Programming/SGProject/Assets/"
 
-#define SGOpenGL 1
+#define SGOpenGL 0

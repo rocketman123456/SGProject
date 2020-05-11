@@ -37,7 +37,6 @@ namespace SG
 		int32_t GetWindowHeight() const { return m_Height; }
 
 	protected:
-		int initWindow();
 		int initVulkan();
 		int createInstance();
 		int setupDebugMessenger();

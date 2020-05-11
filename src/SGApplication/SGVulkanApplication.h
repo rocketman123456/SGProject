@@ -12,7 +12,7 @@ namespace SG
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
 	public:
-		int Initialize(int32_t w, int32_t h);
+		virtual int Initialize(int32_t w, int32_t h);
 		virtual int Initialize() override;
 		virtual void Finalize() override;
 
@@ -22,11 +22,9 @@ namespace SG
 		GLFWwindow* GetGLFWWindow() const { return m_Window; }
 		int32_t GetWindowWidth() const { return m_Width; }
 		int32_t GetWindowHeight() const { return m_Height; }
+
 	protected:
 		int InitWindow();
-		int InitVulkan();
-
-		int CreateInstance();
 
 	protected:
 		GLFWwindow* m_Window = 0;

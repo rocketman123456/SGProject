@@ -22,10 +22,12 @@ namespace SG
 	extern SGIApplication<SGApplication>* g_pApp;
 	extern SGIApplication<SGOpenGLApplication>* g_pGLApp;
 	extern SGIApplication<SGVulkanApplication>* g_pVKApp;
+
 	extern SGIRuntimeModule<SGProcessManager>* g_pProcessManager;
 	extern SGIRuntimeModule<SGEventManager>* g_pEventManager;
 	extern SGIRuntimeModule<SGFileManager>* g_pFileManager;
 	extern SGIRuntimeModule<SGInputManager>* g_pInputManager;
+
 	extern SGIRuntimeModule<SGGraphicsManager>* g_pGraphicsManager;
 	extern SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGLGraphicsManager;
 	extern SGIRuntimeModule<SGVulkanGraphicsManager>* g_pVKGraphicsManager;

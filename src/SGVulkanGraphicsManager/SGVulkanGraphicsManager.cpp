@@ -4,7 +4,7 @@
 
 namespace SG
 {
-	extern SGIApplication<SGVulkanApplication>* g_pGLApp;
+	extern SGIApplication<SGVulkanApplication>* g_pVKApp;
 
 	SG_MEMORYPOOL_DEFINITION(SGVulkanGraphicsManager);
 	SG_MEMORYPOOL_AUTOINIT(SGVulkanGraphicsManager, 128);
@@ -41,8 +41,7 @@ int SG::SGVulkanGraphicsManager::Initialize()
 {
 	int result = 0;
 	do {
-		result = initWindow();
-		if (result) { break; }
+		m_Window = static_cast<SGVulkanApplication*>(g_pVKApp)->GetGLFWWindow();
 		result = initVulkan();
 		if (result) { break; }
 	} while (false);
@@ -69,23 +68,17 @@ void SG::SGVulkanGraphicsManager::Tick()
 	glfwPollEvents();
 }
 
-int SG::SGVulkanGraphicsManager::initWindow()
-{
-	glfwInit();
-
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-	m_Window = glfwCreateWindow(m_Width, m_Height, "Vulkan", nullptr, nullptr);
-	return 0;
-}
-
 int SG::SGVulkanGraphicsManager::initVulkan()
 {
 	int result = 0;
-	result += createInstance();
-	result += setupDebugMessenger();
-	result += pickPhysicalDevice();
+	do {
+		result = createInstance();
+		if (result) { break; }
+		result = setupDebugMessenger();
+		if (result) { break; }
+		result = pickPhysicalDevice();
+		if (result) { break; }
+	} while (false);
 	return result;
 }
 
