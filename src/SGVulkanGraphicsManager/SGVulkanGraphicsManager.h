@@ -11,9 +11,18 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
+#include <optional>
 
 namespace SG
 {
+	struct QueueFamilyIndices {
+		std::optional<uint32_t> graphicsFamily;
+
+		bool isComplete() {
+			return graphicsFamily.has_value();
+		}
+	};
+
 	class SGVulkanGraphicsManager : implements SGIRuntimeModule<SGVulkanGraphicsManager>
 	{
 		SG_MEMORYPOOL_DECLARATION(0);
@@ -32,6 +41,10 @@ namespace SG
 		int initVulkan();
 		int createInstance();
 		int setupDebugMessenger();
+		int pickPhysicalDevice();
+
+		bool isDeviceSuitable(VkPhysicalDevice device);
+		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 		void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		std::vector<const char*> getRequiredExtensions();
 		bool checkValidationLayerSupport();
@@ -44,6 +57,8 @@ namespace SG
 		// Vulkan
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
+
+		VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
 		static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 			VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, 
