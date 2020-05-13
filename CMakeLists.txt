@@ -34,10 +34,10 @@ find_package(SOIL CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 
 #find_package(glslang CONFIG REQUIRED)
-#target_link_libraries(main PRIVATE glslang::HLSL glslang::SPIRV glslang::glslang glslang::OGLCompiler)
 #find_package(soil2 CONFIG REQUIRED)
-#target_link_libraries(main PRIVATE soil2)
 
+#target_link_libraries(main PRIVATE glslang::HLSL glslang::SPIRV glslang::glslang glslang::OGLCompiler)
+#target_link_libraries(main PRIVATE soil2)
 #target_link_libraries(main PRIVATE SOIL)
 #target_link_libraries(main PRIVATE fmt::fmt fmt::fmt-header-only)
 #target_link_libraries(main PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
@@ -73,6 +73,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGApplication"
 	"${PROJECT_SOURCE_DIR}/src/SGEventManager"
 	"${PROJECT_SOURCE_DIR}/src/SGFileManager"
+	"${PROJECT_SOURCE_DIR}/src/SGGameLogic"
 	"${PROJECT_SOURCE_DIR}/src/SGGraphics"
 	"${PROJECT_SOURCE_DIR}/src/SGGraphicsManager"
 	"${PROJECT_SOURCE_DIR}/src/SGOpenGLGraphicsManager"
@@ -84,6 +85,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/src/SGMultiThread"
 	"${PROJECT_SOURCE_DIR}/src/SGProcessManager"
 	"${PROJECT_SOURCE_DIR}/src/SGProject"
+	"${PROJECT_SOURCE_DIR}/src/SGSceneManager"
 	"${PROJECT_SOURCE_DIR}/src/SGTimeFactory"
 )
 

@@ -169,7 +169,6 @@ void SG::SGOpenGLGraphicsManager::Tick()
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	// -------------------------------------------------------------------------------
 	glfwSwapBuffers(m_Window);
-	glfwPollEvents();
 }
 
 void SG::SGOpenGLGraphicsManager::GenerateData()

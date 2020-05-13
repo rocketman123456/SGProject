@@ -100,8 +100,8 @@ bool SG::SGInputManager::CheckOnRelease(int Key)
 
 void SG::SGInputManager::Tick()
 {
-	m_deltaTime = m_timer->GetElapse();
 	m_timer->Update();
+	glfwPollEvents();
 	UpdateCurrentKeys();
 
 	if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -159,4 +159,5 @@ void SG::SGInputManager::Tick()
 	}
 
 	UpdatePreviousKeys();
+	m_deltaTime = m_timer->GetElapse();
 }

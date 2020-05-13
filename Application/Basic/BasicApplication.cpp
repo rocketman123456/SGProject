@@ -17,10 +17,12 @@ namespace SG
 	SGIApplication<SGApplication>* g_pApp = &SGApplication::GetSingleton();
 	SGIApplication<SGOpenGLApplication>* g_pGLApp = &SGOpenGLApplication::GetSingleton();
 	SGIApplication<SGVulkanApplication>* g_pVKApp = &SGVulkanApplication::GetSingleton();
+
 	SGIRuntimeModule<SGProcessManager>* g_pProcessManager = &SGProcessManager::GetSingleton();
 	SGIRuntimeModule<SGEventManager>* g_pEventManager = &SGEventManager::GetSingleton();
 	SGIRuntimeModule<SGFileManager>* g_pFileManager = &SGFileManager::GetSingleton();
 	SGIRuntimeModule<SGInputManager>* g_pInputManager = &SGInputManager::GetSingleton();
+
 	SGIRuntimeModule<SGGraphicsManager>* g_pGraphicsManager = &SGGraphicsManager::GetSingleton();
 	SGIRuntimeModule<SGOpenGLGraphicsManager>* g_pGLGraphicsManager = &SGOpenGLGraphicsManager::GetSingleton();
 	SGIRuntimeModule<SGVulkanGraphicsManager>* g_pVKGraphicsManager = &SGVulkanGraphicsManager::GetSingleton();
