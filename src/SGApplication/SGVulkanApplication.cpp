@@ -51,6 +51,7 @@ int SG::SGVulkanApplication::InitWindow()
 	int result = 0;
 	glfwInit();
 
+	glfwWindowHint(GLFW_RESIZABLE, false);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 

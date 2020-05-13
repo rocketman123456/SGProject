@@ -1,6 +1,7 @@
 #pragma once
 #include "SGIRuntimeModule.h"
 #include "SGMemoryMacros.h"
+#include "SGVulkanApplication.h"
 #include "SGConfig.h"
 #include "SGLog.h"
 
@@ -20,6 +21,8 @@
 
 namespace SG
 {
+	extern SGIApplication<SGVulkanApplication>* g_pVKApp;
+
 	struct QueueFamilyIndices {
 		std::optional<uint32_t> graphicsFamily;
 		std::optional<uint32_t> presentFamily;
@@ -56,7 +59,17 @@ namespace SG
 		int createLogicalDevice();
 		int createSwapChain();
 		int createImageViews();
+		int createRenderPass();
 		int createGraphicsPipeline();
+		int createFramebuffers();
+		int createCommandPool();
+		int createCommandBuffers();
+		int createSyncObjects();
+
+		void drawFrame();
+
+		void cleanupSwapChain();
+		void recreateSwapChain();
 
 		VkShaderModule createShaderModule(const std::vector<char>& code);
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
@@ -93,8 +106,30 @@ namespace SG
 		VkFormat swapChainImageFormat;
 		VkExtent2D swapChainExtent;
 		std::vector<VkImageView> swapChainImageViews;
+		std::vector<VkFramebuffer> swapChainFramebuffers;
+
+		VkRenderPass renderPass;
+		VkPipelineLayout pipelineLayout;
+		VkPipeline graphicsPipeline;
+
+		VkCommandPool commandPool;
+		std::vector<VkCommandBuffer> commandBuffers;
+
+		std::vector<VkSemaphore> imageAvailableSemaphores;
+		std::vector<VkSemaphore> renderFinishedSemaphores;
+		std::vector<VkFence> inFlightFences;
+		std::vector<VkFence> imagesInFlight;
+		size_t currentFrame = 0;
+
+		bool framebufferResized = false;
 
 	protected:
+		static void framebufferResizeCallback(GLFWwindow* window, int width, int height) 
+		{
+			auto graphics = reinterpret_cast<SGVulkanGraphicsManager*>(glfwGetWindowUserPointer(window));
+			graphics->framebufferResized = true;
+		}
+
 		static std::vector<char> readFile(const std::string& filename) 
 		{
 			std::ifstream file(filename, std::ios::ate | std::ios::binary);
