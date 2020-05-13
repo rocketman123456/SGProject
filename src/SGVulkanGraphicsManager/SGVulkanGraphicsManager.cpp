@@ -448,8 +448,8 @@ int SG::SGVulkanGraphicsManager::createGraphicsPipeline()
 {
 	int result = 0;
 	do {
-		auto vertShaderCode = readFile(m_BaseAssetDir + "Shaders/vert.spv");
-		auto fragShaderCode = readFile(m_BaseAssetDir + "Shaders/frag.spv");
+		auto vertShaderCode = readFile(m_BaseAssetDir + "Shaders/simplevert.spv");
+		auto fragShaderCode = readFile(m_BaseAssetDir + "Shaders/simplefrag.spv");
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 		VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
