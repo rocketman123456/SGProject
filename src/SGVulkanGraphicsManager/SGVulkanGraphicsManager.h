@@ -8,6 +8,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include <fstream>
 #include <stdexcept>
@@ -16,6 +17,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
+#include <array>
 #include <optional>
 #include <set>
 
@@ -36,6 +38,48 @@ namespace SG
 		VkSurfaceCapabilitiesKHR capabilities;
 		std::vector<VkSurfaceFormatKHR> formats;
 		std::vector<VkPresentModeKHR> presentModes;
+	};
+
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec3 color;
+
+		static VkVertexInputBindingDescription getBindingDescription() {
+			VkVertexInputBindingDescription bindingDescription{};
+			bindingDescription.binding = 0;
+			bindingDescription.stride = sizeof(Vertex);
+			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+			return bindingDescription;
+		}
+
+		static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+			std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+
+			attributeDescriptions[0].binding = 0;
+			attributeDescriptions[0].location = 0;
+			attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[0].offset = offsetof(Vertex, pos);
+
+			attributeDescriptions[1].binding = 0;
+			attributeDescriptions[1].location = 1;
+			attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+			attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+			return attributeDescriptions;
+		}
+	};
+
+	//const std::vector<Vertex> vertices = {
+	//	{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	//	{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+	//	{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+	//};
+
+	const std::vector<Vertex> vertices = {
+	{{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+	{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 	};
 
 	class SGVulkanGraphicsManager : implements SGIRuntimeModule<SGVulkanGraphicsManager>
@@ -62,6 +106,7 @@ namespace SG
 		int createRenderPass();
 		int createGraphicsPipeline();
 		int createFramebuffers();
+		int createVertexBuffer();
 		int createCommandPool();
 		int createCommandBuffers();
 		int createSyncObjects();
@@ -76,6 +121,7 @@ namespace SG
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
@@ -113,6 +159,10 @@ namespace SG
 		VkPipeline graphicsPipeline;
 
 		VkCommandPool commandPool;
+
+		VkBuffer vertexBuffer;
+		VkDeviceMemory vertexBufferMemory;
+
 		std::vector<VkCommandBuffer> commandBuffers;
 
 		std::vector<VkSemaphore> imageAvailableSemaphores;
